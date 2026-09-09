@@ -1,0 +1,19 @@
+{
+  "format": "gloopipelago-standalone-build-receipt",
+  "schema": 1,
+  "sources": {
+    "prefix": "src/browser/shell-prefix.html",
+    "core": "src/core/v1-mirror.mjs",
+    "app": "src/browser/app.mjs",
+    "tail": "src/browser/shell-tail.html"
+  },
+  "output": "dist/gloopipelago.html",
+  "prefixSha256": "8508c182073f9a21be43d4b9e0f470891306a49688cc81ba0e9e04a0e56771b3",
+  "coreSha256": "77c5736b56a2c85799df8caaa221d85cb583c1ef63c1533b74102f73f86efd7b",
+  "appSha256": "43cbabfb908919364df844290241364768cda7a95992382f63d9df1f78f1adb4",
+  "tailSha256": "fc837380d9f5351ff0a5776c8e1f523bb2107106f2ac860e0e76535377ec5b78",
+  "outputSha256": "9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0",
+  "outputBytes": 18271,
+  "standaloneNoExternalScript": true,
+  "syntaxCheck": "PASS"
+}
