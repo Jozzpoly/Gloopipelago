@@ -1,0 +1,2 @@
+# Generated standalone browser delivery; build locally with tools/m12.mjs.
+dist/

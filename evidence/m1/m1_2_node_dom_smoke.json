@@ -1,0 +1,15 @@
+{
+  "format": "gloopipelago-m1-2-node-dom-contract-smoke",
+  "schema": 1,
+  "status": "PASS",
+  "bootPopulation": 34,
+  "bootFood": 144,
+  "speedControl": "4×",
+  "pauseControl": "PASS",
+  "foodBurst": "PASS",
+  "pointerFood": "PASS",
+  "catastrophe": "PASS",
+  "reset": "PASS",
+  "newSeed": "PASS",
+  "claim": "Node DOM/canvas contract smoke only; this is not browser evidence."
+}

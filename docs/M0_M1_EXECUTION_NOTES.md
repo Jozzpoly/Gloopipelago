@@ -63,9 +63,9 @@ Do not call this a V1 historical checkpoint; it is a new M1 apparatus capability
 
 ### M1.2 Standalone browser delivery
 
-**Status: next authorized substep; not started.**
+**Status: candidate generated; Owner real-browser smoke required before promotion.**
 
-Generate a one-file playable HTML from the maintained core without making the generated artifact the source of truth.
+`tools/m12.mjs` generates local `dist/gloopipelago.html` from the frozen V1 shell plus the maintained core. `dist/` is intentionally untracked; the exact artifact is identified by its build receipt and is not a second maintained biology source.
 
 Required product checks:
 - opens and runs as a standalone browser artifact;

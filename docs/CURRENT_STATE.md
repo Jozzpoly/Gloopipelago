@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 READY.**
+**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 CANDIDATE — OWNER SMOKE REQUIRED.**
 
 ## Project identity
 
@@ -47,13 +47,17 @@ See `evidence/m1/M1_1_QUALIFICATION_REPORT.md`.
 
 M1.1 does **not** define a stable save format and does not split RNG streams.
 
-## Next authorized slice
+## M1.2 candidate
 
-**M1.2 — standalone browser delivery + real-browser / Owner product smoke only.**
+**CANDIDATE READY / NOT PROMOTED.**
 
-M1.2 must generate a playable one-file browser artifact from maintained source rather than creating a second hand-maintained source. It must preserve recognizable V1 behavior/UI, retain usable speed controls, and verify that the living-world experience has not regressed. Browser evidence is mandatory because container Chromium was unavailable during M0.
+`tools/m12.mjs` deterministically generates untracked local `dist/gloopipelago.html` by preserving the frozen V1 shell and injecting the maintained core. Build/static/syntax checks, Node DOM/canvas contract smoke, M1.1 causal regression and M0 regression are PASS. The exact candidate SHA-256 is `9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0`.
 
-M2+ remains unauthorized.
+The container Chromium minimal sanity probe remains unavailable before product load, so no browser PASS is claimed. **Owner smoke in a normal browser is the remaining M1.2 promotion gate.**
+
+See `evidence/m1/M1_2_CANDIDATE_REPORT.md`.
+
+M2+ remains unauthorized until M1.2 is explicitly promoted and the next boundary is reviewed.
 
 ## Important negative decisions
 
