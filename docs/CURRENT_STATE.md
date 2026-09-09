@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 PROMOTED / POST-M1 REVIEW COMPLETE / B0 AUTHORIZED.**
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PASS & READY FOR PROMOTION / M2a PLANNING NEXT.**
 
 ## Project identity
 
@@ -11,86 +11,84 @@ Gloopipelago is a **living evolution observatory**: the living world is primary;
 
 `Jozzpoly/Gloopipelago`
 
-`main` is implementation authority. Each bounded implementation slice branches from live `main` only after the previous authority boundary is reconciled.
+`main` is implementation authority. Every bounded implementation slice branches from live `main` after the previous authority boundary is reconciled.
 
 ## Frozen historical authority
 
 `archive/v1/gloopipelago_single.html`  
 SHA-256 `ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8`
 
-The frozen artifact is immutable provenance. Post-M1 review explicitly rejects keeping it indefinitely as the active source of future browser UI/controller work.
+The frozen artifact is immutable provenance. It is no longer intended to be an active live-product source after B0.
 
-## M0
+## M0 / M1
 
-**PASS / PROMOTED.** Frozen executable Oracle, exact reference profiles, state-diff and protected process/Accidental-Biology semantics are canonical under `evidence/m0/`.
+**PROMOTED.**
 
-## M1
-
-**COMPLETE / PROMOTED.**
-
-- M1.0 maintained DOM-free core: exact Oracle parity.
-- M1.1 explicit-state V1-compatible RNG: exact sequence/call topology plus test-only restore proof.
-- M1.2 generated standalone browser delivery: exact deterministic build plus Owner real-browser smoke.
+M0 established executable historical truth. M1 established the maintained causal core, explicit V1-compatible RNG state, deterministic standalone delivery and positive Owner real-browser evidence.
 
 Exact Owner-tested M1.2 artifact:
 SHA-256 `9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0`
 (18271 bytes).
 
-Owner smoke measured requested 4× at 4.00× over a 90 s real interval and demonstrated rapid seed scouting as a real workflow.
+## Post-M1 boundary
 
-See:
-- `evidence/m1/M1_2_QUALIFICATION_REPORT.md`
-- `evidence/m1/M1_2_OWNER_SMOKE_VIDEO_ANALYSIS.md`
-- `docs/POST_M1_BOUNDARY_REVIEW_2026-09-09.md`
+See `docs/POST_M1_BOUNDARY_REVIEW_2026-09-09.md`.
 
-## Post-M1 boundary verdict
+Verdict: close browser-source ownership before M2.
 
-**B0 — Browser Surface Ownership Mirror is the next authorized implementation slice.**
+## B0 — Browser Surface Ownership Mirror
 
-M1.2 currently builds from maintained core plus the frozen V1 browser shell. That was correct for qualification but leaves the immutable archive as an active product-source dependency.
+**PASS / READY FOR PROMOTION.**
 
-A disposable probe demonstrated that the browser surface can be extracted into maintained source and reassembled with the current core while reproducing the exact Owner-tested M1.2 artifact byte-for-byte.
+Maintained live browser source now exists as:
 
-B0 therefore closes ownership only. It must not alter product appearance, controls or biology.
+- `src/browser/shell-prefix.html`
+- `src/browser/app.mjs`
+- `src/browser/shell-tail.html`
 
-## B0 gate
+The current standalone build is `tools/build-standalone.mjs` and reads maintained browser source + maintained core. It does **not** read the frozen archive.
 
-B0 must preserve:
-- exact M1.2 artifact SHA `9750e602…a5b0`;
-- unchanged maintained core;
-- deterministic standalone build;
-- Node DOM/canvas contract smoke;
-- all M1.1 and M0 causal regressions.
+B0 qualifier confirms the maintained browser pieces were initially extracted byte-for-byte from the qualified historical surface and that the resulting product remains exactly the already Owner-tested M1.2 artifact:
 
-If output bytes remain exact, no new Owner browser smoke is required.
+SHA-256 `9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0`.
 
-## Next after B0
+Maintained core remains exactly:
+SHA-256 `77c5736b56a2c85799df8caaa221d85cb583c1ef63c1533b74102f73f86efd7b`.
 
-**M2a Passive Lifecycle Witness Seam is the leading next slice, but its implementation is not authorized until B0 is promoted.**
+Build determinism, Node DOM/canvas contract smoke, M1.1 8/8 causal regression/process specimens and M0 8/8 Oracle/state-diff regression all pass.
 
-Current M2a direction:
-- founder/birth/death evidence downstream only;
-- no RNG consumption;
-- no `parentId` requirement in biological blob state;
+See `evidence/b0/B0_QUALIFICATION_REPORT.md`.
+
+## Next bounded action
+
+After B0 promotion:
+
+**Plan M2a — Passive Lifecycle Witness Seam.**
+
+M2a planning constraints:
+- founder/birth/death observations downstream only;
+- zero RNG consumption;
+- no biological decision authority;
+- no `parentId` requirement in authoritative blob state;
 - no generic EventBus;
 - no lineage dashboard;
 - no stable archive/save schema;
-- witness ON/OFF causal state and RNG-call topology must remain exact;
-- throughput/GC overhead must be qualified because Owner commonly runs 4×.
+- caller-side retention only until evidence justifies more;
+- witness OFF/ON must preserve exact causal state and RNG-call topology;
+- throughput/GC overhead must be qualified.
 
-M3 logical-world/view separation remains strategically important after witness qualification because viewport authority is a demonstrated experimental confound.
+M2a implementation is not authorized until its bounded plan/contract has been reviewed.
 
-## Evidence-backed later needs
+## Later evidence-backed needs
 
-Owner smoke established, but this boundary does not yet implement:
-- full/copyable seed + later recent/bookmark workflow;
-- clearer highest-living vs historical generation semantics;
-- separation of UI diet classes from functional generalism;
+Still deliberately outside B0:
+- full/copyable seed and later recent/bookmark workflow;
+- precise living-vs-historical generation labels;
+- functional-vs-UI diet classification;
 - optional sense-ring visibility;
-- true x10/x20+ fast-forward/stress mode with achieved-speed reporting.
+- true x10/x20+ fast-forward/stress mode with achieved-speed reporting;
+- M3 logical-world/view separation.
 
-Fast-forward is a strong future Owner/research tool, but not a simple slider extension and not the immediate Integration-Spine step.
+## Negative decisions
 
-## Important negative decisions
-
-Do not modify frozen V1. Do not clean up Accidental Biology by inertia. Do not split RNG streams, add lineage/history storage, change logical-world semantics, add ECS/generic genome frameworks/spatial indexes/event sourcing/new ecology, or expand fast-forward UI inside B0.
+Do not edit frozen V1. Do not clean up Accidental Biology by inertia. Do not split RNG streams, add lineage retention/frameworks, change world semantics, add new ecology/heredity, or bundle Owner UX improvements into B0.
