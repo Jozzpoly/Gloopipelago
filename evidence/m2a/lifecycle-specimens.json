@@ -1,0 +1,110 @@
+{
+  "format": "gloopipelago-m2a-lifecycle-specimens",
+  "schema": 1,
+  "specimens": {
+    "initial": {
+      "count": 34,
+      "ids": [
+        1,
+        34
+      ],
+      "time": 0,
+      "nextId": 35
+    },
+    "reset": {
+      "count": 34,
+      "ids": [
+        1,
+        34
+      ],
+      "time": 0
+    },
+    "birthCascade": {
+      "pairs": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          3,
+          2
+        ],
+        [
+          3,
+          4,
+          3
+        ]
+      ],
+      "births": 3
+    },
+    "naturalBoth": {
+      "id": 1,
+      "energyDepleted": true,
+      "ageExceeded": true,
+      "deaths": 1
+    },
+    "catastrophe": {
+      "ids": [
+        3,
+        2,
+        1
+      ],
+      "foods": 1,
+      "deaths": 3,
+      "flagged": [
+        true,
+        true
+      ]
+    },
+    "autoReseed": {
+      "extinctions": 1,
+      "count": 12,
+      "ids": [
+        1,
+        12
+      ]
+    },
+    "detached": {
+      "blobId": 1,
+      "genomeSpeed": 0.9951217128895222,
+      "parentIdInBlob": false
+    },
+    "offFastPath": {
+      "arrayKeys": [
+        "blobs",
+        "foods"
+      ],
+      "hasWitnessCollection": false
+    },
+    "transitionCommitted": {
+      "birthObservations": [
+        {
+          "kind": "birth",
+          "births": 1,
+          "deaths": 0,
+          "pop": 2
+        },
+        {
+          "kind": "birth",
+          "births": 2,
+          "deaths": 0,
+          "pop": 3
+        },
+        {
+          "kind": "birth",
+          "births": 3,
+          "deaths": 0,
+          "pop": 4
+        }
+      ],
+      "deathObservation": {
+        "kind": "death",
+        "births": 0,
+        "deaths": 1,
+        "pop": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "format": "gloopipelago-m2a-qualification-receipt",
+  "schema": 1,
+  "status": "PASS_READY_FOR_PROMOTION",
+  "candidateCoreSha256": "18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56",
+  "preM2aCoreSha256": "77c5736b56a2c85799df8caaa221d85cb583c1ef63c1533b74102f73f86efd7b",
+  "browserAppSha256": "43cbabfb908919364df844290241364768cda7a95992382f63d9df1f78f1adb4",
+  "browserPrefixSha256": "8508c182073f9a21be43d4b9e0f470891306a49688cc81ba0e9e04a0e56771b3",
+  "browserTailSha256": "fc837380d9f5351ff0a5776c8e1f523bb2107106f2ac860e0e76535377ec5b78",
+  "generatedArtifactSha256": "4c60670e4b6c0a4824de170eb3d8a52db3d96bdb49210f398148ac89dc9b611d",
+  "generatedArtifactBytes": 20279,
+  "profileParity": {
+    "collector": "8/8 PASS",
+    "noRetain": "8/8 PASS",
+    "throwing": "8/8 PASS",
+    "mutating": "8/8 PASS",
+    "witnessOff": "M1.1 8/8 PASS"
+  },
+  "denseParity": {
+    "collector": "3/3 PASS",
+    "mutating": "3/3 PASS",
+    "historicalM11": "3/3 PASS"
+  },
+  "rngTopology": "PASS \u2014 candidate RNG call counts remain exact; witness-mode parity runner asserts Oracle equality per profile",
+  "protectedProcessSpecimens": "PASS",
+  "m0Regression": "8/8 PASS + state-diff self-test",
+  "semanticSpecimens": "9 PASS",
+  "nodeDomCanvasSmoke": "PASS",
+  "ownerSmokeRequired": false,
+  "ownerSmokeReason": "Browser/controller source is unchanged from B0, browser constructs Simulation with witness OFF, causal/product gates pass, and no material throughput regression was detected."
+}
