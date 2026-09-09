@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PASS / M1 READY, pending repository promotion of the M0 qualification branch.**
+**State:** **M0 PROMOTED / M1 READY.**
 
 ## Project identity
 
@@ -11,7 +11,7 @@ Gloopipelago is a **living evolution observatory**: the living world is primary;
 
 `Jozzpoly/Gloopipelago`
 
-`main` currently contains only the minimal bootstrap. M0 evidence lives on the `m0-oracle-qualification` branch until reviewed/promoted.
+`main` is the canonical authority for the qualified M0 historical baseline. The original qualification branch/PR remains provenance; new implementation work must branch from live `main`.
 
 ## Frozen historical authority
 
