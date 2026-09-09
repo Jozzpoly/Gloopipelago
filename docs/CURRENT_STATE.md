@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a CONTRACT PROMOTED / M2a IMPLEMENTATION AUTHORIZED / M2a CODE NOT STARTED.**
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a PROMOTED / POST-M2a INTEGRATION REVIEW REQUIRED / M2b & M3 UNAUTHORIZED.**
 
 ## Project identity
 
@@ -59,25 +59,24 @@ Build determinism, Node DOM/canvas contract smoke, M1.1 8/8 causal regression/pr
 
 See `evidence/b0/B0_QUALIFICATION_REPORT.md`.
 
+## M2a — Passive Lifecycle Witness
+
+**PASS / PROMOTED.**
+
+Implementation remains within the promoted bounded contract: founder/birth/death records are detached and downstream-only; no RNG, scheduler, world, browser-controller or biological semantics changed; Simulation retains no lifecycle history.
+
+Candidate core SHA-256:
+`18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56`
+
+Qualification: collector/no-retain/throwing/mutating 8/8 causal parity, dense differential PASS, protected M1.1/M0 regressions PASS, nine semantic specimen groups PASS, and performance guardrails PASS after the predeclared investigation path.
+
+See `evidence/m2a/M2A_QUALIFICATION_REPORT.md`.
+
 ## Next bounded action
 
-**Implement M2a Passive Lifecycle Witness from a fresh branch, exactly within the promoted bounded contract.**
+**Perform the post-M2a integration/boundary review before authorizing any M2b or M3 implementation.**
 
-Canonical contract: `docs/M2A_PASSIVE_LIFECYCLE_WITNESS_CONTRACT_2026-09-09.md`.
-
-M2a planning constraints:
-- founder/birth/death observations downstream only;
-- zero RNG consumption;
-- no biological decision authority;
-- no `parentId` requirement in authoritative blob state;
-- no generic EventBus;
-- no lineage dashboard;
-- no stable archive/save schema;
-- caller-side retention only until evidence justifies more;
-- witness OFF/ON must preserve exact causal state and RNG-call topology;
-- throughput/GC overhead must be qualified.
-
-M2a implementation is authorized only within this promoted contract; M2b/M3 and adjacent feature work remain unauthorized.
+M3 logical-world/view separation remains the leading intentional-semantic-change candidate, but it is not yet authorized. M2b retention/history UI is also not automatic.
 
 ## Later evidence-backed needs
 

@@ -1,6 +1,6 @@
 // Maintained V1-compatible core. M1.0 established exact Oracle parity.
 // M1.1 makes Mulberry32 state explicit while preserving sequence and call topology.
-// Do not clean up scheduler/time/world semantics or split RNG streams in M1.1.
+// M2a adds a passive lifecycle witness seam only; scheduler/time/world semantics and RNG topology remain unchanged.
 
 class Mulberry32Stream {
   constructor(seed = 0) { this.state = seed >>> 0; }
@@ -27,7 +27,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const wrapHue = h => (h % 360 + 360) % 360;
 
 class Simulation {
-  constructor({ seed = 1, width = 900, height = 700, mutationScale = 1, senseCost = 0.0026, digestExponent = 1.5, minDigestion = 0.55, autoReseed = true, foodRate = 4.2, foodEnergyScale = 1, foodLifetime = 75, dietJumpRate = 0, stableNiches = false } = {}) {
+  constructor({ seed = 1, width = 900, height = 700, mutationScale = 1, senseCost = 0.0026, digestExponent = 1.5, minDigestion = 0.55, autoReseed = true, foodRate = 4.2, foodEnergyScale = 1, foodLifetime = 75, dietJumpRate = 0, stableNiches = false } = {}, { lifecycleWitness = null } = {}) {
     this.width = width;
     this.mutationScale = mutationScale;
     this.senseCost = senseCost;
@@ -41,14 +41,19 @@ class Simulation {
     this.stableNiches = stableNiches;
     this.height = height;
     this.seed = seed >>> 0;
+    this._lifecycleWitness = typeof lifecycleWitness === 'function' ? lifecycleWitness : null;
     this.rngStream = new Mulberry32Stream(this.seed);
     this.rng = () => this.rngStream.next();
-    this.reset(this.seed);
+    this._reset(this.seed, 'initial');
   }
 
   rand(a = 1, b = 0) { return b + this.rng() * (a - b); }
 
   reset(seed = this.seed) {
+    return this._reset(seed, 'reset');
+  }
+
+  _reset(seed, founderOrigin) {
     this.seed = seed >>> 0;
     this.rngStream = new Mulberry32Stream(this.seed);
     this.rng = () => this.rngStream.next();
@@ -60,7 +65,10 @@ class Simulation {
     this.births = 0;
     this.deaths = 0;
     this.extinctions = 0;
-    for (let i = 0; i < 34; i++) this.spawnBlob();
+    for (let i = 0; i < 34; i++) {
+      const b = this.spawnBlob();
+      if (this._lifecycleWitness) this._emitFounder(b, founderOrigin);
+    }
     this.addFood(145);
     this.initial = this.snapshot();
   }
@@ -134,11 +142,50 @@ class Simulation {
 
   spawnBlob(x = this.rand(this.width,0), y = this.rand(this.height,0), genome = null, generation = 0, energy = 70, countBirth = false) {
     const g = genome || this.makeGenome();
-    this.blobs.push({
+    const b = {
       id:this.nextId++, x, y, vx:this.rand(1,-1), vy:this.rand(1,-1), a:this.rand(Math.PI*2,0),
       g, energy, age:0, generation, reproCooldown:0
-    });
+    };
+    this.blobs.push(b);
     if (countBirth) this.births++;
+    return b;
+  }
+
+  _genomeRecord(g) {
+    return {
+      hue:g.hue, speed:g.speed, sense:g.sense, size:g.size,
+      eff:g.eff, wander:g.wander, diet:g.diet
+    };
+  }
+
+  _deliverLifecycle(record) {
+    const sink = this._lifecycleWitness;
+    if (!sink) return;
+    try { sink(record); } catch {}
+  }
+
+  _emitFounder(b, origin) {
+    if (!this._lifecycleWitness) return;
+    this._deliverLifecycle({
+      kind:'founder', origin, time:this.simTime, id:b.id, generation:b.generation,
+      x:b.x, y:b.y, energy:b.energy, genome:this._genomeRecord(b.g)
+    });
+  }
+
+  _emitBirth(b, parentId) {
+    if (!this._lifecycleWitness) return;
+    this._deliverLifecycle({
+      kind:'birth', time:this.simTime, id:b.id, parentId, generation:b.generation,
+      x:b.x, y:b.y, energy:b.energy, genome:this._genomeRecord(b.g)
+    });
+  }
+
+  _emitDeath(b, mechanism, energyDepleted, ageExceeded) {
+    if (!this._lifecycleWitness) return;
+    this._deliverLifecycle({
+      kind:'death', mechanism, time:this.simTime, id:b.id, generation:b.generation,
+      x:b.x, y:b.y, energy:b.energy, age:b.age, energyDepleted, ageExceeded
+    });
   }
 
   updateBlob(b, dt) {
@@ -200,11 +247,12 @@ class Simulation {
       b.reproCooldown = 3.5;
       const child = this.makeGenome(b.g);
       const ang = this.rand(Math.PI*2,0);
-      this.spawnBlob(
+      const born = this.spawnBlob(
         clamp(b.x + Math.cos(ang)*10,0,this.width),
         clamp(b.y + Math.sin(ang)*10,0,this.height),
         child, b.generation+1, b.energy*.92, true
       );
+      if (this._lifecycleWitness) this._emitBirth(born, b.id);
     }
   }
 
@@ -224,23 +272,34 @@ class Simulation {
 
     for (let i = this.blobs.length - 1; i >= 0; i--) {
       const b = this.blobs[i];
-      if (b.energy <= 0 || b.age > 170) {
+      const energyDepleted = b.energy <= 0;
+      const ageExceeded = b.age > 170;
+      if (energyDepleted || ageExceeded) {
         if (this.rng() < .55) this.foods.push({x:b.x,y:b.y,e:this.rand(19,12)*this.foodEnergyScale,rich:true,kind:-1,expiresAt:this.simTime + this.foodLifetime});
         this.blobs.splice(i,1);
         this.deaths++;
+        if (this._lifecycleWitness) this._emitDeath(b, 'natural-sweep', energyDepleted, ageExceeded);
       }
     }
 
     if (this.blobs.length === 0) {
       this.extinctions++;
-      if (this.autoReseed) for (let i = 0; i < 12; i++) this.spawnBlob();
+      if (this.autoReseed) for (let i = 0; i < 12; i++) {
+        const b = this.spawnBlob();
+        if (this._lifecycleWitness) this._emitFounder(b, 'auto-reseed');
+      }
     }
   }
 
   catastrophe() {
     this.foods.splice(0, Math.floor(this.foods.length*.72));
     for (let i=this.blobs.length-1;i>=0;i--) {
-      if (this.rng() < .48) { this.blobs.splice(i,1); this.deaths++; }
+      if (this.rng() < .48) {
+        const b = this.blobs[i];
+        this.blobs.splice(i,1);
+        this.deaths++;
+        if (this._lifecycleWitness) this._emitDeath(b, 'catastrophe', b.energy <= 0, b.age > 170);
+      }
     }
   }
 

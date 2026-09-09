@@ -1,0 +1,152 @@
+{
+  "format": "gloopipelago-m2a-throughput-qualification",
+  "schema": 1,
+  "candidateCoreSha256": "18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56",
+  "baselineCoreSha256": "77c5736b56a2c85799df8caaa221d85cb583c1ef63c1533b74102f73f86efd7b",
+  "primaryInterleavedRun": {
+    "format": "gloopipelago-m2a-throughput",
+    "schema": 1,
+    "ticks": 6000,
+    "reps": 5,
+    "profiles": [
+      "P-NOMINAL-S1",
+      "P-COMPACT"
+    ],
+    "summary": {
+      "P-NOMINAL-S1": {
+        "medianTps": {
+          "baseline": 20635.020469114905,
+          "off": 20920.109657636145,
+          "no-retain": 22906.22089704986,
+          "collector": 21796.853557345312
+        },
+        "pairedMedianRatios": {
+          "offVsBaseline": 0.9352998785190565,
+          "noRetainVsOff": 1.0596447156243294,
+          "collectorVsOff": 1.041909144553128
+        },
+        "pairedRatios": {
+          "offVsBaseline": [
+            0.9352998785190565,
+            1.0762444127045538,
+            0.8694005827436314,
+            1.1983595472472564,
+            0.9237483411224703
+          ],
+          "noRetainVsOff": [
+            1.1898663830259582,
+            1.031424945188372,
+            1.1346108388377432,
+            0.9982416978661722,
+            1.0596447156243294
+          ],
+          "collectorVsOff": [
+            1.229226095358102,
+            0.9100787716203075,
+            1.1869348016651646,
+            0.8226402296932098,
+            1.041909144553128
+          ]
+        },
+        "medianHeapDelta": {
+          "baseline": 2199456,
+          "off": 1355752,
+          "no-retain": 3366432,
+          "collector": 3524680
+        },
+        "eventsMedian": 207
+      },
+      "P-COMPACT": {
+        "medianTps": {
+          "baseline": 21142.998982176065,
+          "off": 22112.43569883369,
+          "no-retain": 23592.789213150314,
+          "collector": 24641.032417204122
+        },
+        "pairedMedianRatios": {
+          "offVsBaseline": 1.0458514289990213,
+          "noRetainVsOff": 1.066045185353264,
+          "collectorVsOff": 1.1143517951983823
+        },
+        "pairedRatios": {
+          "offVsBaseline": [
+            1.0458514289990213,
+            1.249073459945608,
+            0.8756192517162696,
+            1.252923296386139,
+            0.9467572011678125
+          ],
+          "noRetainVsOff": [
+            1.066045185353264,
+            1.0358439706413216,
+            1.06898993591381,
+            1.0187820077674348,
+            1.0755660020496711
+          ],
+          "collectorVsOff": [
+            1.1143517951983823,
+            0.8232635103346683,
+            1.1396489338474631,
+            0.8809377808289968,
+            1.1279609885386264
+          ]
+        },
+        "medianHeapDelta": {
+          "baseline": 6983992,
+          "off": 3649800,
+          "no-retain": 3428896,
+          "collector": 2956656
+        },
+        "eventsMedian": 167
+      }
+    },
+    "rawRowsStored": false,
+    "rawRowsReason": "Per-run timing/heap rows are regenerable apparatus output; repository authority retains paired summaries and ratio vectors used for the qualification claim."
+  },
+  "offPathInvestigation": {
+    "reason": "Primary nominal paired median entered the predeclared 5-10% investigation band; direct baseline/OFF A-B runs were repeated.",
+    "nominal": {
+      "id": "P-NOMINAL-S1",
+      "reps": 15,
+      "ticks": 12000,
+      "medianRatio": 0.9854575905808398,
+      "ratios": [
+        0.9999346756702331,
+        0.9854575905808398,
+        0.9458480700236375,
+        1.1610398709403804,
+        0.9072285616435269,
+        1.1079326770462348,
+        1.2505142932876674,
+        1.1216598763205654,
+        0.9471662403286538,
+        0.9780714456915006,
+        0.94738888384677,
+        1.1329837737743285,
+        0.9521967371032425,
+        1.1579345992139676,
+        0.9589312186145349
+      ]
+    },
+    "compact": {
+      "id": "P-COMPACT",
+      "reps": 10,
+      "ticks": 12000,
+      "medianRatio": 0.9760209439168657,
+      "ratios": [
+        0.9488415215417336,
+        1.6084488105152712,
+        0.9760209439168657,
+        0.8496762784134769,
+        0.9160100214020235,
+        1.1783080824465726,
+        0.9612574517043352,
+        1.1090840842598255,
+        0.8210932472683662,
+        1.069359448336388
+      ]
+    },
+    "verdict": "PASS \u2014 no material OFF-path regression detected; direct paired medians are within 5% of baseline."
+  },
+  "memoryNote": "heapUsed deltas were recorded only as a noisy sentinel and are not treated as a quantitative claim; structural qualification confirms Simulation retains no lifecycle-record collection."
+}

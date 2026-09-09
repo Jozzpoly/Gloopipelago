@@ -6,8 +6,8 @@
 
 - **M0 — Freeze / Executable Oracle: PROMOTED.**
 - **M1 — Maintained core + explicit RNG state + standalone browser delivery: COMPLETE / PROMOTED.**
-- **B0 — Browser Surface Ownership Mirror: PASS / promotion pending.**
-- **M2a — Passive Lifecycle Witness: planning is next after B0 promotion.**
+- **B0 — Browser Surface Ownership Mirror: PROMOTED.**
+- **M2a — Passive Lifecycle Witness: PROMOTED.**
 
 The frozen historical V1 artifact is preserved exactly at `archive/v1/gloopipelago_single.html`.
 
@@ -21,6 +21,7 @@ Start with:
 
 - `docs/CURRENT_STATE.md`
 - `docs/POST_M1_BOUNDARY_REVIEW_2026-09-09.md`
+- `evidence/m2a/M2A_QUALIFICATION_REPORT.md`
 - `evidence/b0/B0_QUALIFICATION_REPORT.md`
 - `evidence/m0/PROCESS_SEMANTICS_V1.md`
 
