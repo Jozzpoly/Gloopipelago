@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 PROMOTED / POST-M1 BOUNDARY REVIEW REQUIRED.**
+**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 PROMOTED / POST-M1 REVIEW COMPLETE / B0 AUTHORIZED.**
 
 ## Project identity
 
@@ -11,57 +11,86 @@ Gloopipelago is a **living evolution observatory**: the living world is primary;
 
 `Jozzpoly/Gloopipelago`
 
-`main` is implementation authority. Historical PRs/qualification reports remain provenance; each new bounded substep branches from live `main` only after the previous promotion.
+`main` is implementation authority. Each bounded implementation slice branches from live `main` only after the previous authority boundary is reconciled.
 
 ## Frozen historical authority
 
 `archive/v1/gloopipelago_single.html`  
 SHA-256 `ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8`
 
-M0 mechanically extracts the historical `mulberry32 + Simulation` block as executable Oracle in Node `v22.16.0` / V8 `12.4.254.21-node.26`.
+The frozen artifact is immutable provenance. Post-M1 review explicitly rejects keeping it indefinitely as the active source of future browser UI/controller work.
 
 ## M0
 
-**PASS / PROMOTED.** Eight reference profiles, exact Float64-aware causal fingerprints, state-diff, process/Accidental-Biology specimens, and historical source receipts are canonical under `evidence/m0/`.
+**PASS / PROMOTED.** Frozen executable Oracle, exact reference profiles, state-diff and protected process/Accidental-Biology semantics are canonical under `evidence/m0/`.
 
-## M1.0
+## M1
 
-**PASS / PROMOTED.** The first maintained DOM-free core reproduced the M0 Oracle exactly across all reference profiles and protected process semantics, including dense per-tick nominal/resize/intervention checks.
+**COMPLETE / PROMOTED.**
 
-See `evidence/m1/M1_0_QUALIFICATION_REPORT.md`.
+- M1.0 maintained DOM-free core: exact Oracle parity.
+- M1.1 explicit-state V1-compatible RNG: exact sequence/call topology plus test-only restore proof.
+- M1.2 generated standalone browser delivery: exact deterministic build plus Owner real-browser smoke.
 
-## M1.1
+Exact Owner-tested M1.2 artifact:
+SHA-256 `9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0`
+(18271 bytes).
 
-**PASS / PROMOTED.** Mulberry32 has explicit resumable uint32 state without changing stochastic semantics. Sequence, call-count, dense causal parity and test-only restore continuation are qualified.
-
-M1.1 does **not** define a stable save format and does not split RNG streams.
-
-See `evidence/m1/M1_1_QUALIFICATION_REPORT.md`.
-
-## M1.2
-
-**PASS / PROMOTED.**
-
-`tools/m12.mjs` deterministically generates untracked local `dist/gloopipelago.html` from the frozen V1 shell plus maintained core. The exact Owner-tested artifact is SHA-256 `9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0` (18271 bytes).
-
-Automated build/static/syntax/Node DOM-contract checks pass. M1.1 and M0 regressions remain exact. The previously missing real-browser gate is now cleared by Owner smoke: a ~142.8 s desktop-browser recording showed the living world running recognizably as V1 with no blocking visible regression, and requested 4× was measured at 4.00× over a 90 s real interval.
+Owner smoke measured requested 4× at 4.00× over a 90 s real interval and demonstrated rapid seed scouting as a real workflow.
 
 See:
-
 - `evidence/m1/M1_2_QUALIFICATION_REPORT.md`
 - `evidence/m1/M1_2_OWNER_SMOKE_VIDEO_ANALYSIS.md`
-- `evidence/m1/m1_2_owner_smoke_receipt.json`
+- `docs/POST_M1_BOUNDARY_REVIEW_2026-09-09.md`
 
-## Newly demonstrated post-M1 needs / debts
+## Post-M1 boundary verdict
 
-Owner smoke exposed several valuable later requirements without making them M1.2 blockers: full/copyable seed provenance for seed scouting; clearer highest-living-vs-historical generation semantics; separation of UI diet classes from functional generalism; optional sense-ring visibility; and a true x10/x20+ fast-forward/stress workflow with achieved-speed reporting rather than a simple slider extension.
+**B0 — Browser Surface Ownership Mirror is the next authorized implementation slice.**
 
-## Next authorized action
+M1.2 currently builds from maintained core plus the frozen V1 browser shell. That was correct for qualification but leaves the immutable archive as an active product-source dependency.
 
-**Perform a short post-M1 integration/boundary review.**
+A disposable probe demonstrated that the browser surface can be extracted into maintained source and reassembled with the current core while reproducing the exact Owner-tested M1.2 artifact byte-for-byte.
 
-That review must decide the next bounded slice from current evidence. M2 implementation is **not yet authorized merely because M1 completed**.
+B0 therefore closes ownership only. It must not alter product appearance, controls or biology.
+
+## B0 gate
+
+B0 must preserve:
+- exact M1.2 artifact SHA `9750e602…a5b0`;
+- unchanged maintained core;
+- deterministic standalone build;
+- Node DOM/canvas contract smoke;
+- all M1.1 and M0 causal regressions.
+
+If output bytes remain exact, no new Owner browser smoke is required.
+
+## Next after B0
+
+**M2a Passive Lifecycle Witness Seam is the leading next slice, but its implementation is not authorized until B0 is promoted.**
+
+Current M2a direction:
+- founder/birth/death evidence downstream only;
+- no RNG consumption;
+- no `parentId` requirement in biological blob state;
+- no generic EventBus;
+- no lineage dashboard;
+- no stable archive/save schema;
+- witness ON/OFF causal state and RNG-call topology must remain exact;
+- throughput/GC overhead must be qualified because Owner commonly runs 4×.
+
+M3 logical-world/view separation remains strategically important after witness qualification because viewport authority is a demonstrated experimental confound.
+
+## Evidence-backed later needs
+
+Owner smoke established, but this boundary does not yet implement:
+- full/copyable seed + later recent/bookmark workflow;
+- clearer highest-living vs historical generation semantics;
+- separation of UI diet classes from functional generalism;
+- optional sense-ring visibility;
+- true x10/x20+ fast-forward/stress mode with achieved-speed reporting.
+
+Fast-forward is a strong future Owner/research tool, but not a simple slider extension and not the immediate Integration-Spine step.
 
 ## Important negative decisions
 
-Do not clean up Accidental Biology by inertia. Do not introduce split RNG streams, lineage, logical-world semantics, ECS, generic genome/development frameworks, spatial indexes, event sourcing, new ecology, or other future substrate work until explicitly authorized by the next boundary review.
+Do not modify frozen V1. Do not clean up Accidental Biology by inertia. Do not split RNG streams, add lineage/history storage, change logical-world semantics, add ECS/generic genome frameworks/spatial indexes/event sourcing/new ecology, or expand fast-forward UI inside B0.
