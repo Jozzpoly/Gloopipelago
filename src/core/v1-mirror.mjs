@@ -1,16 +1,26 @@
-// M1.0 literal maintained mirror of the qualified V1 oracle core.
-// Historical parity source: archive/v1/gloopipelago_single.html lines 109-363.
-// Do not clean up scheduler/RNG/time/world semantics in M1.0.
+// Maintained V1-compatible core. M1.0 established exact Oracle parity.
+// M1.1 makes Mulberry32 state explicit while preserving sequence and call topology.
+// Do not clean up scheduler/time/world semantics or split RNG streams in M1.1.
 
-function mulberry32(seed) {
-  let a = seed >>> 0;
-  return function () {
-    a |= 0;
+class Mulberry32Stream {
+  constructor(seed = 0) { this.state = seed >>> 0; }
+
+  next() {
+    let a = this.state | 0;
     a = (a + 0x6D2B79F5) | 0;
+    this.state = a >>> 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  }
+
+  snapshot() { return this.state >>> 0; }
+  restore(state) { this.state = state >>> 0; }
+}
+
+function mulberry32(seed) {
+  const stream = new Mulberry32Stream(seed);
+  return () => stream.next();
 }
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -31,7 +41,8 @@ class Simulation {
     this.stableNiches = stableNiches;
     this.height = height;
     this.seed = seed >>> 0;
-    this.rng = mulberry32(this.seed);
+    this.rngStream = new Mulberry32Stream(this.seed);
+    this.rng = () => this.rngStream.next();
     this.reset(this.seed);
   }
 
@@ -39,7 +50,8 @@ class Simulation {
 
   reset(seed = this.seed) {
     this.seed = seed >>> 0;
-    this.rng = mulberry32(this.seed);
+    this.rngStream = new Mulberry32Stream(this.seed);
+    this.rng = () => this.rngStream.next();
     this.simTime = 0;
     this.season = 0;
     this.nextId = 1;
@@ -258,4 +270,4 @@ class Simulation {
   }
 }
 
-export { Simulation, mulberry32 };
+export { Simulation, Mulberry32Stream, mulberry32 };
