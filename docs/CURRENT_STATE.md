@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a CONTRACT READY FOR AUTHORITY REVIEW / M2a IMPLEMENTATION NOT YET AUTHORIZED.**
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a CONTRACT PROMOTED / M2a IMPLEMENTATION AUTHORIZED / M2a CODE NOT STARTED.**
 
 ## Project identity
 
@@ -61,9 +61,9 @@ See `evidence/b0/B0_QUALIFICATION_REPORT.md`.
 
 ## Next bounded action
 
-**Promote/review the bounded M2a Passive Lifecycle Witness Contract, then implement M2a only if the contract survives review.**
+**Implement M2a Passive Lifecycle Witness from a fresh branch, exactly within the promoted bounded contract.**
 
-Canonical contract candidate: `docs/M2A_PASSIVE_LIFECYCLE_WITNESS_CONTRACT_2026-09-09.md`.
+Canonical contract: `docs/M2A_PASSIVE_LIFECYCLE_WITNESS_CONTRACT_2026-09-09.md`.
 
 M2a planning constraints:
 - founder/birth/death observations downstream only;
@@ -77,7 +77,7 @@ M2a planning constraints:
 - witness OFF/ON must preserve exact causal state and RNG-call topology;
 - throughput/GC overhead must be qualified.
 
-M2a implementation remains unauthorized until this contract is promoted as authority.
+M2a implementation is authorized only within this promoted contract; M2b/M3 and adjacent feature work remain unauthorized.
 
 ## Later evidence-backed needs
 
