@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 READY.**
+**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 PROMOTED / M1.2 READY.**
 
 ## Project identity
 
@@ -11,48 +11,50 @@ Gloopipelago is a **living evolution observatory**: the living world is primary;
 
 `Jozzpoly/Gloopipelago`
 
-`main` is the canonical authority for the qualified M0 historical baseline. The original qualification branch/PR remains provenance; new implementation work must branch from live `main`.
+`main` is implementation authority. Historical PRs/qualification reports remain provenance; each new bounded substep branches from live `main` only after the previous promotion.
 
 ## Frozen historical authority
 
 `archive/v1/gloopipelago_single.html`  
 SHA-256 `ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8`
 
-M0 mechanically extracts the exact historical `mulberry32 + Simulation` block and qualifies it as an executable oracle in Node `v22.16.0` / V8 `12.4.254.21-node.26`.
+M0 mechanically extracts the historical `mulberry32 + Simulation` block as executable Oracle in Node `v22.16.0` / V8 `12.4.254.21-node.26`.
 
-## M0 result
+## M0
 
-**PASS in qualified Node runtime.**
+**PASS.** Eight reference profiles, exact Float64-aware causal fingerprints, state-diff, process/Accidental-Biology specimens, and historical source receipts are canonical under `evidence/m0/`.
 
-- 8/8 reference profiles reproduce exact full-causal-state fingerprints.
-- synthetic scheduler/Accidental Biology specimens reproduce byte-identically, including explicit empty-state extinction/no-reseed and extinction/auto-reseed branches.
-- state-diff diagnostic is qualified.
-- throughput is characterized, not treated as a fake absolute threshold.
-- installed headless Chromium is unusable even for a minimal unrelated page, so browser-realm exactness is not claimed; M1 retains browser/Owner smoke.
+## M1.0
 
-See `evidence/m0/M0_QUALIFICATION_REPORT.md`.
-
-## M1.0 result
-
-**PASS in qualified Node runtime.**
-
-- maintained `src/core/v1-mirror.mjs` exists;
-- its 8608-byte V1 model body is byte-identical to the M0 Oracle body;
-- 8/8 Oracle↔Mirror reference profiles match exact causal state at all M0 checkpoints;
-- nominal, resize and intervention profiles additionally pass dense tick-by-tick differential checks;
-- M0 process specimens reproduce byte-identically;
-- full M0 regression gate remains PASS.
+**PASS.** The first maintained DOM-free core reproduced the M0 Oracle exactly across all reference profiles and protected process semantics, including dense per-tick nominal/resize/intervention checks.
 
 See `evidence/m1/M1_0_QUALIFICATION_REPORT.md`.
 
+## M1.1
+
+**PASS.** Mulberry32 now has explicit resumable uint32 state without changing stochastic semantics.
+
+- 2,000,000 direct Oracle↔stream sequence positions PASS across 8 boundary/representative seeds;
+- 64 stream snapshot/restore cases PASS;
+- RNG call counts match Oracle on all 8 simulation profiles;
+- explicit end-state arithmetic matches draw counts on all profiles;
+- 8/8 full causal profiles and all protected process specimens remain exact;
+- dense nominal/resize/intervention parity remains exact;
+- four simulation-level test-only checkpoint/restore continuations remain exact in both causal world state and RNG state;
+- M0 regression remains PASS.
+
+See `evidence/m1/M1_1_QUALIFICATION_REPORT.md`.
+
+M1.1 does **not** define a stable save format and does not split RNG streams.
+
 ## Next authorized slice
 
-**M1.1 — explicit-state V1-compatible RNG only.**
+**M1.2 — standalone browser delivery + real-browser / Owner product smoke only.**
 
-M1.1 may change RNG representation but not random sequence or call topology. It must prove direct sequence equivalence, exact profile parity after the replacement, and snapshot/restore continuation equivalence. RNG stream splitting remains M4 work and is not authorized.
+M1.2 must generate a playable one-file browser artifact from maintained source rather than creating a second hand-maintained source. It must preserve recognizable V1 behavior/UI, retain usable speed controls, and verify that the living-world experience has not regressed. Browser evidence is mandatory because container Chromium was unavailable during M0.
 
-After M1.1 qualification, M1.2 may generate the standalone browser delivery and perform browser/Owner product smoke. M2+ remains unauthorized.
+M2+ remains unauthorized.
 
 ## Important negative decisions
 
-Do not clean up Accidental Biology during M1. Do not introduce ECS, generic genome/development frameworks, spatial indexes, split RNG streams, logical-world semantics, event sourcing, or new biology. Those belong to later evidence-driven epochs.
+Do not clean up Accidental Biology during M1. Do not introduce split RNG streams, lineage, logical-world semantics, ECS, generic genome/development frameworks, spatial indexes, event sourcing, new ecology, or other future substrate work.

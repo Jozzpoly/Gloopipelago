@@ -48,6 +48,8 @@ M1.0 PASS requires exact parity across all M0 profiles and process specimens in 
 
 ### M1.1 Explicit-state V1-compatible RNG
 
+**Status: PASS.** See `evidence/m1/M1_1_QUALIFICATION_REPORT.md`.
+
 Only after M1.0 parity, replace the closure-only Mulberry32 representation with an explicit-state wrapper that emits the **same sequence** as frozen V1.
 
 This is a separately qualified substep. It must not yet split RNG streams or change call topology.
@@ -60,6 +62,8 @@ Required evidence:
 Do not call this a V1 historical checkpoint; it is a new M1 apparatus capability layered onto a V1-compatible sequence.
 
 ### M1.2 Standalone browser delivery
+
+**Status: next authorized substep; not started.**
 
 Generate a one-file playable HTML from the maintained core without making the generated artifact the source of truth.
 

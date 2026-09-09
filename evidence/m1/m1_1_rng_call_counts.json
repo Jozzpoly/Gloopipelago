@@ -1,0 +1,66 @@
+[
+  {
+    "id": "P-NOMINAL-S1",
+    "ticks": 12000,
+    "calls": 451324,
+    "startState": 1405791629,
+    "endState": 134153401,
+    "expectedEnd": 134153401
+  },
+  {
+    "id": "P-NOMINAL-S12345678",
+    "ticks": 12000,
+    "calls": 457687,
+    "startState": 1711211524,
+    "endState": 2446567367,
+    "expectedEnd": 2446567367
+  },
+  {
+    "id": "P-COMPACT",
+    "ticks": 12000,
+    "calls": 458521,
+    "startState": 1711211524,
+    "endState": 964098033,
+    "expectedEnd": 964098033
+  },
+  {
+    "id": "P-WIDE",
+    "ticks": 12000,
+    "calls": 431905,
+    "startState": 4060227397,
+    "endState": 2236244698,
+    "expectedEnd": 2236244698
+  },
+  {
+    "id": "P-RESIZE",
+    "ticks": 2400,
+    "calls": 85254,
+    "startState": 1711211524,
+    "endState": 2192019650,
+    "expectedEnd": 2192019650
+  },
+  {
+    "id": "P-INTERVENTION",
+    "ticks": 1500,
+    "calls": 32414,
+    "startState": 4060227397,
+    "endState": 3101557371,
+    "expectedEnd": 3101557371
+  },
+  {
+    "id": "P-LOWPRODUCTIVITY-NORESEED",
+    "ticks": 38000,
+    "calls": 666400,
+    "startState": 1711211524,
+    "endState": 477915556,
+    "expectedEnd": 477915556
+  },
+  {
+    "id": "P-LOWPRODUCTIVITY-AUTORESEED",
+    "ticks": 38000,
+    "calls": 666400,
+    "startState": 1711211524,
+    "endState": 477915556,
+    "expectedEnd": 477915556
+  }
+]
