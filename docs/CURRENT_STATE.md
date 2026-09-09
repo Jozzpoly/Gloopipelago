@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PASS & READY FOR PROMOTION / M2a PLANNING NEXT.**
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a CONTRACT READY FOR AUTHORITY REVIEW / M2a IMPLEMENTATION NOT YET AUTHORIZED.**
 
 ## Project identity
 
@@ -38,7 +38,7 @@ Verdict: close browser-source ownership before M2.
 
 ## B0 — Browser Surface Ownership Mirror
 
-**PASS / READY FOR PROMOTION.**
+**PASS / PROMOTED.**
 
 Maintained live browser source now exists as:
 
@@ -61,9 +61,9 @@ See `evidence/b0/B0_QUALIFICATION_REPORT.md`.
 
 ## Next bounded action
 
-After B0 promotion:
+**Promote/review the bounded M2a Passive Lifecycle Witness Contract, then implement M2a only if the contract survives review.**
 
-**Plan M2a — Passive Lifecycle Witness Seam.**
+Canonical contract candidate: `docs/M2A_PASSIVE_LIFECYCLE_WITNESS_CONTRACT_2026-09-09.md`.
 
 M2a planning constraints:
 - founder/birth/death observations downstream only;
@@ -77,11 +77,11 @@ M2a planning constraints:
 - witness OFF/ON must preserve exact causal state and RNG-call topology;
 - throughput/GC overhead must be qualified.
 
-M2a implementation is not authorized until its bounded plan/contract has been reviewed.
+M2a implementation remains unauthorized until this contract is promoted as authority.
 
 ## Later evidence-backed needs
 
-Still deliberately outside B0:
+Still deliberately outside M2a:
 - full/copyable seed and later recent/bookmark workflow;
 - precise living-vs-historical generation labels;
 - functional-vs-UI diet classification;
@@ -91,4 +91,4 @@ Still deliberately outside B0:
 
 ## Negative decisions
 
-Do not edit frozen V1. Do not clean up Accidental Biology by inertia. Do not split RNG streams, add lineage retention/frameworks, change world semantics, add new ecology/heredity, or bundle Owner UX improvements into B0.
+Do not edit frozen V1. Do not clean up Accidental Biology by inertia. During M2a do not split RNG streams, add lineage retention/frameworks, change world semantics, add new ecology/heredity, or bundle Owner UX improvements into the witness slice.
