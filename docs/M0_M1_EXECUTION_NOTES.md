@@ -63,16 +63,18 @@ Do not call this a V1 historical checkpoint; it is a new M1 apparatus capability
 
 ### M1.2 Standalone browser delivery
 
-**Status: candidate generated; Owner real-browser smoke required before promotion.**
+**Status: PASS / promoted.**
 
 `tools/m12.mjs` generates local `dist/gloopipelago.html` from the frozen V1 shell plus the maintained core. `dist/` is intentionally untracked; the exact artifact is identified by its build receipt and is not a second maintained biology source.
 
-Required product checks:
-- opens and runs as a standalone browser artifact;
-- world/UI behavior remains recognizably V1;
-- 1× and 4× controls remain usable;
-- no permanent research-dashboard wall;
-- browser/Owner smoke is required because the M0 container Chromium sanity check was unavailable.
+Qualified product evidence:
+- generated artifact opens and runs in the Owner desktop browser;
+- world/UI remains recognizably V1 with no blocking visible regression;
+- requested 4× was measured at 4.00× over a 90 s real interval;
+- rapid New Seed scouting remains usable and emerged as a real Owner workflow;
+- no permanent research-dashboard wall was introduced.
+
+See `evidence/m1/M1_2_QUALIFICATION_REPORT.md`. Post-M1 boundary review must occur before M2 implementation is authorized.
 
 ## Throughput
 
