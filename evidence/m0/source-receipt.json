@@ -1,0 +1,19 @@
+{
+  "format": "gloopipelago-m0-source-receipt",
+  "schema": 1,
+  "sourcePath": "archive/v1/gloopipelago_single.html",
+  "sourceSha256": "ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8",
+  "sourceBytes": 17607,
+  "sourceLines": 460,
+  "oracleStartLine": 109,
+  "oracleEndLine": 363,
+  "oracleSha256": "10ff185a4c8500f0c84b61f26f120918b362158bdf32bd766bdbe4c3f5f8eea6",
+  "oracleBytes": 8608,
+  "oracleLines": 255,
+  "runtime": {
+    "node": "v22.16.0",
+    "v8": "12.4.254.21-node.26",
+    "platform": "linux",
+    "arch": "x64"
+  }
+}

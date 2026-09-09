@@ -1,0 +1,108 @@
+{
+  "format": "gloopipelago-m0-process-specimens",
+  "schema": 1,
+  "specimens": {
+    "S-LIVE-APPEND": {
+      "births": 3,
+      "generations": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "fingerprint": "4b5c14e3bb2229fd536d94c176c4ad213786c7bd09376bb19ac02cd6f042f1d1"
+    },
+    "S-CONTENDED-FOOD": {
+      "normalWinner": 1,
+      "reversedWinner": 2,
+      "normalFingerprint": "cd151e4d8f0e29985be48e3bfcfadbab223c824f95d66713e31e9f948f0de1b2",
+      "reversedFingerprint": "5911574e6aca8f9064921e0e70b76f575bb35a964efd3d434545dd7e48648c8f"
+    },
+    "S-POP-CAP": {
+      "population": 260,
+      "births": 1,
+      "firstCooldown": 3.5,
+      "secondCooldown": 0,
+      "fingerprint": "49f379cae2b9f218091e337b7634b7cce50bbf9f49ce3f4ac486187d44cc6e2a"
+    },
+    "S-AGE-REPRO": {
+      "births": 1,
+      "deaths": 1,
+      "survivorGenerations": [
+        1
+      ],
+      "fingerprint": "26cda1d67f795b85a2ebfbf4071b1f0218d237688a962c2c3f1bc34fee8c67c0"
+    },
+    "S-FOOD-ORDER": {
+      "remainingEnergy": [
+        5
+      ],
+      "fingerprint": "7528ac9044bb09d973f516626e8bb6be80b63c8243828d541d86d8bb4a59afd0"
+    },
+    "S-CORPSE-PHASE": {
+      "afterFirst": {
+        "foods": 1,
+        "survivorEnergy": 69.96619444444444,
+        "deaths": 1
+      },
+      "afterSecond": {
+        "foods": 0,
+        "survivorEnergy": 85.43238888888888,
+        "deaths": 1
+      },
+      "fingerprint": "623efe95b898d4eebf8c5a6efac7c21bb6636e51f4d5b2724bd4bb5642b5f662"
+    },
+    "S-CATASTROPHE": {
+      "remaining": [
+        8,
+        9,
+        10
+      ],
+      "fingerprint": "996b59c0fd4f5ae459d7116b147785c05938f54b359ca87e93fa693cb089fa9f"
+    },
+    "S-FLOAT-TIME": {
+      "tick2040": {
+        "simTime": 33.99999999999935,
+        "season": 0
+      },
+      "tick2041": {
+        "simTime": 34.01666666666602,
+        "season": 1
+      },
+      "fingerprint": "69ed40e2863f612eeeab2f3d782a9d645273bc2ac83471ad864a413d1123518d"
+    },
+    "S-EMPTY-NORESEED": {
+      "afterFirst": {
+        "population": 0,
+        "extinctions": 1
+      },
+      "afterSecond": {
+        "population": 0,
+        "extinctions": 2
+      },
+      "fingerprint": "012364c359f74c794973ee4783cfc49c179894ff3f52d2c3684fafb6e75e1304"
+    },
+    "S-EMPTY-AUTORESEED": {
+      "afterFirst": {
+        "population": 12,
+        "extinctions": 1,
+        "nextId": 13
+      },
+      "generations": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "fingerprint": "3a7542c404371feec126d53d93bdb33b04a89557723d058d0a4d018a384afa16"
+    }
+  }
+}
