@@ -5,7 +5,8 @@
 ## Current authority state
 
 - **M0 — Freeze / Executable Oracle: PASS** in the qualified Node/V8 runtime.
-- **M1 — Pure Mirror: not started on this branch.**
+- **M1.0 — Literal maintained Pure Mirror: PASS.**
+- **M1.1 — Explicit-state V1-compatible RNG: next authorized substep; not started.**
 - M2+ remains unauthorized.
 
 The frozen historical V1 artifact is preserved exactly at `archive/v1/gloopipelago_single.html`.

@@ -1,0 +1,72 @@
+{
+  "format": "gloopipelago-m1-paired-throughput",
+  "schema": 1,
+  "rows": [
+    {
+      "seed": 1,
+      "order": [
+        "oracle",
+        "mirror"
+      ],
+      "oracle": {
+        "ms": 909.504968,
+        "ticksPerSecond": 6596.995300854696
+      },
+      "mirror": {
+        "ms": 254.00217300000008,
+        "ticksPerSecond": 23621.845156419182
+      },
+      "ratio": 3.580697587181663
+    },
+    {
+      "seed": 305419896,
+      "order": [
+        "mirror",
+        "oracle"
+      ],
+      "mirror": {
+        "ms": 260.2909299999999,
+        "ticksPerSecond": 23051.129749315518
+      },
+      "oracle": {
+        "ms": 1009.2978290000001,
+        "ticksPerSecond": 5944.726945409886
+      },
+      "ratio": 3.877575868663578
+    },
+    {
+      "seed": 2654435769,
+      "order": [
+        "oracle",
+        "mirror"
+      ],
+      "oracle": {
+        "ms": 1179.963576,
+        "ticksPerSecond": 5084.902722454884
+      },
+      "mirror": {
+        "ms": 278.0773280000003,
+        "ticksPerSecond": 21576.732066412813
+      },
+      "ratio": 4.243292987913056
+    },
+    {
+      "seed": 3735928559,
+      "order": [
+        "mirror",
+        "oracle"
+      ],
+      "mirror": {
+        "ms": 198.16456299999936,
+        "ticksPerSecond": 30277.86557377577
+      },
+      "oracle": {
+        "ms": 769.6128550000003,
+        "ticksPerSecond": 7796.127573778634
+      },
+      "ratio": 3.8837057612566324
+    }
+  ],
+  "medianMirrorOverOracle": 3.8806408149601053,
+  "note": "Characterization only; product/browser throughput remains a separate gate."
+}
