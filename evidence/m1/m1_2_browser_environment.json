@@ -1,0 +1,14 @@
+{
+  "format": "gloopipelago-m1-2-browser-environment",
+  "schema": 1,
+  "chromiumVersion": "Chromium 144.0.7559.96 built on Debian GNU/Linux 13 (trixie)",
+  "minimalProbe": {
+    "command": "chromium --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --disable-background-networking --disable-sync --disable-default-apps --disable-extensions --no-first-run --mute-audio --dump-dom data:text/html,<html><body>gloop-m12-minimal</body></html>",
+    "timeoutSeconds": 8,
+    "exitCode": 124,
+    "timedOut": true,
+    "failureClass": "container browser environment unavailable before product load (DBus/TERM errors)"
+  },
+  "status": "UNAVAILABLE",
+  "claim": "No real-browser product PASS is claimed from this container. Owner smoke in a normal browser is required before M1.2 promotion."
+}

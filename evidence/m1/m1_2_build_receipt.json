@@ -1,0 +1,19 @@
+{
+  "format": "gloopipelago-m1-2-build-receipt",
+  "schema": 1,
+  "generator": "tools/m12.mjs",
+  "template": "archive/v1/gloopipelago_single.html",
+  "maintainedCore": "src/core/v1-mirror.mjs",
+  "output": "dist/gloopipelago.html",
+  "templateSha256": "ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8",
+  "maintainedCoreSha256": "77c5736b56a2c85799df8caaa221d85cb583c1ef63c1533b74102f73f86efd7b",
+  "prefixSha256": "8508c182073f9a21be43d4b9e0f470891306a49688cc81ba0e9e04a0e56771b3",
+  "suffixSha256": "51b8b37992feffa4cf8b947966433159d693015613c4f51154a5f2f9a7aeb22c",
+  "outputSha256": "9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0",
+  "outputBytes": 18271,
+  "exactCoreInjection": true,
+  "exactFrozenPrefix": true,
+  "exactFrozenSuffix": true,
+  "standaloneNoExternalScript": true,
+  "syntaxCheck": "PASS"
+}

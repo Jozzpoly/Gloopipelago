@@ -1,0 +1,23 @@
+{
+  "format": "gloopipelago-m1-2-owner-smoke-receipt",
+  "schema": 1,
+  "date": "2026-09-09",
+  "candidateCommit": "43e89f300536bc1a5abb0655a556c0bef9f8f558",
+  "artifactSha256": "9750e602ae61d712c64b046f130dac4c743e718d45c638ff423d5484aed9a5b0",
+  "recordingSecondsApprox": 142.8,
+  "ownerAssessment": "raw but appears to work",
+  "blockingVisibleRegression": false,
+  "measuredRequestedSpeed": 4,
+  "measuredEffectiveSpeed": 4.0,
+  "measuredIntervalRealSeconds": 90,
+  "measuredIntervalWorldSeconds": 360,
+  "longRunSeed": 956866913,
+  "observedPopulationPeakApprox": 193,
+  "rapidSeedScoutingObserved": true,
+  "browserGate": "PASS",
+  "caveats": [
+    "recording is not console-error evidence",
+    "resize was not meaningfully stress-tested",
+    "natural-history observations are qualitative, not controlled causal evidence"
+  ]
+}
