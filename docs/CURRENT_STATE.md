@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a CONTRACT PROMOTED / M2a IMPLEMENTATION PASS & READY FOR PROMOTION / POST-M2a REVIEW NEXT.**
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a PROMOTED / POST-M2a INTEGRATION REVIEW REQUIRED / M2b & M3 UNAUTHORIZED.**
 
 ## Project identity
 
@@ -61,7 +61,7 @@ See `evidence/b0/B0_QUALIFICATION_REPORT.md`.
 
 ## M2a — Passive Lifecycle Witness
 
-**PASS / READY FOR PROMOTION.**
+**PASS / PROMOTED.**
 
 Implementation remains within the promoted bounded contract: founder/birth/death records are detached and downstream-only; no RNG, scheduler, world, browser-controller or biological semantics changed; Simulation retains no lifecycle history.
 
@@ -74,7 +74,7 @@ See `evidence/m2a/M2A_QUALIFICATION_REPORT.md`.
 
 ## Next bounded action
 
-**Promote M2a through PR review, then perform a post-M2a integration/boundary review before authorizing any M2b or M3 implementation.**
+**Perform the post-M2a integration/boundary review before authorizing any M2b or M3 implementation.**
 
 M3 logical-world/view separation remains the leading intentional-semantic-change candidate, but it is not yet authorized. M2b retention/history UI is also not automatic.
 
