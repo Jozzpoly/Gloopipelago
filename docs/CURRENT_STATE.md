@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 READY.**
+**State:** **M0 PROMOTED / M1.0 PROMOTED / M1.1 READY.**
 
 ## Project identity
 
@@ -32,18 +32,26 @@ M0 mechanically extracts the exact historical `mulberry32 + Simulation` block an
 
 See `evidence/m0/M0_QUALIFICATION_REPORT.md`.
 
+## M1.0 result
+
+**PASS in qualified Node runtime.**
+
+- maintained `src/core/v1-mirror.mjs` exists;
+- its 8608-byte V1 model body is byte-identical to the M0 Oracle body;
+- 8/8 Oracle↔Mirror reference profiles match exact causal state at all M0 checkpoints;
+- nominal, resize and intervention profiles additionally pass dense tick-by-tick differential checks;
+- M0 process specimens reproduce byte-identically;
+- full M0 regression gate remains PASS.
+
+See `evidence/m1/M1_0_QUALIFICATION_REPORT.md`.
+
 ## Next authorized slice
 
-**M1 — Pure Mirror only.**
+**M1.1 — explicit-state V1-compatible RNG only.**
 
-M1 must:
-1. create a small DOM-free maintained source core that preserves V1 causal trajectory exactly;
-2. preserve V1 RNG sequence, Float64 time accumulation, array ordering and scheduler semantics;
-3. qualify Mirror against the live M0 Oracle with differential exact-state tests;
-4. only after literal parity, introduce an explicit-state V1-compatible RNG wrapper as a separately qualified substep;
-5. generate a standalone browser artifact and perform browser/Owner product smoke.
+M1.1 may change RNG representation but not random sequence or call topology. It must prove direct sequence equivalence, exact profile parity after the replacement, and snapshot/restore continuation equivalence. RNG stream splitting remains M4 work and is not authorized.
 
-M2+ remains unauthorized.
+After M1.1 qualification, M1.2 may generate the standalone browser delivery and perform browser/Owner product smoke. M2+ remains unauthorized.
 
 ## Important negative decisions
 

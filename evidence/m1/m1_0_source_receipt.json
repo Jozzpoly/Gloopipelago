@@ -1,0 +1,9 @@
+{
+  "mirrorPath": "src/core/v1-mirror.mjs",
+  "mirrorFileSha256": "d6cadbe747cfb48d5bdbc1f53821a6481228ce8ea7f3b86420810e0926d2ce89",
+  "mirrorFileBytes": 8855,
+  "mirrorBodySha256": "10ff185a4c8500f0c84b61f26f120918b362158bdf32bd766bdbe4c3f5f8eea6",
+  "mirrorBodyBytes": 8608,
+  "oracleBodySha256": "10ff185a4c8500f0c84b61f26f120918b362158bdf32bd766bdbe4c3f5f8eea6",
+  "exactLiteralBodyMatch": true
+}
