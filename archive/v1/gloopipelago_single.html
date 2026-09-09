@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Gloopipelago — evolution sandbox</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#0b0d10;
+    --panel:#11151a;
+    --line:#26303a;
+    --text:#eef4fa;
+    --muted:#93a0ad;
+    --soft:#171d23;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+  .app{display:grid;grid-template-columns:minmax(0,1fr) 310px;min-height:100vh}
+  main{position:relative;min-width:0}
+  canvas{display:block;width:100%;height:100vh;background:#0d1116}
+  aside{border-left:1px solid var(--line);background:var(--panel);padding:18px;overflow:auto;height:100vh}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  button{
+    border:1px solid var(--line);background:var(--soft);color:var(--text);
+    border-radius:9px;padding:8px 10px;cursor:pointer;font-weight:650
+  }
+  button:hover{filter:brightness(1.12)}
+  .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 16px}
+  .stat{background:#0e1216;border:1px solid #202932;border-radius:10px;padding:9px}
+  .stat b{display:block;font-size:17px}
+  .stat span{font-size:11px;color:var(--muted)}
+  .section{margin-top:14px;padding-top:12px;border-top:1px solid #202932}
+  .section h2{font-size:13px;margin:0 0 8px;color:#d9e2ea}
+  .row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin:5px 0}
+  .row span:first-child{color:var(--muted)}
+  input[type="range"]{width:100%}
+  .legend{font-size:12px;color:var(--muted);line-height:1.45}
+  .pill{display:inline-block;border:1px solid #34414d;border-radius:999px;padding:2px 7px;margin:2px 3px 2px 0;font-size:11px}
+  .overlay{
+    position:absolute;left:14px;top:14px;background:rgba(8,10,13,.74);backdrop-filter:blur(4px);
+    border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:9px 11px;font-size:12px;color:#c8d2dc
+  }
+  @media(max-width:850px){
+    .app{grid-template-columns:1fr}
+    canvas{height:68vh}
+    aside{height:auto;border-left:0;border-top:1px solid var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <main>
+    <canvas id="world"></canvas>
+    <div class="overlay" id="overlay"></div>
+  </main>
+  <aside>
+    <h1>Gloopipelago</h1>
+    <div class="sub">Mutujące gluty walczą o przetrwanie w przesuwającym się krajobrazie pokarmu.</div>
+
+    <div class="controls">
+      <button id="pause">Pauza</button>
+      <button id="burst">+50 jedzenia</button>
+      <button id="catastrophe">Katastrofa</button>
+      <button id="reset">Ten sam seed</button>
+      <button id="newSeed">Nowy seed</button>
+    </div>
+
+    <div class="statgrid">
+      <div class="stat"><b id="pop">0</b><span>populacja</span></div>
+      <div class="stat"><b id="gen">0</b><span>max generacja</span></div>
+      <div class="stat"><b id="food">0</b><span>jedzenie</span></div>
+      <div class="stat"><b id="age">0</b><span>czas świata</span></div>
+      <div class="stat"><b id="seed">0</b><span>seed</span></div>
+      <div class="stat"><b id="births">0</b><span>narodziny</span></div>
+    </div>
+
+    <div class="section">
+      <h2>Tempo symulacji</h2>
+      <input id="speed" type="range" min="0.25" max="4" step="0.25" value="1">
+      <div class="row"><span>mnożnik</span><b id="speedLabel">1×</b></div>
+    </div>
+
+    <div class="section">
+      <h2>Średnie cechy populacji</h2>
+      <div class="row"><span>prędkość</span><b id="avgSpeed">–</b></div>
+      <div class="row"><span>wzrok</span><b id="avgSense">–</b></div>
+      <div class="row"><span>rozmiar</span><b id="avgSize">–</b></div>
+      <div class="row"><span>oszczędność</span><b id="avgEff">–</b></div>
+      <div class="row"><span>specjalizacja diety</span><b id="avgDiet">–</b></div>
+    </div>
+
+    <div class="section">
+      <h2>Jak czytać świat</h2>
+      <div class="legend">
+        <span class="pill">kolor gluta = dieta</span>
+        <span class="pill">większy = droższy</span>
+        <span class="pill">dłuższy ogon = szybszy</span>
+        <span class="pill">pierścień = zasięg zmysłu</span>
+        <p>Dwa kolory pokarmu oznaczają dwie nisze. Gluty dziedziczą specjalizację trawienia; skrajni specjaliści zyskują dużo z własnego zasobu i prawie ignorują obcy. Wyspy lekko migrują sezonowo, ale nie zamieniają się miejscami.</p>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script type="module">
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const wrapHue = h => (h % 360 + 360) % 360;
+
+class Simulation {
+  constructor({ seed = 1, width = 900, height = 700, mutationScale = 1, senseCost = 0.0026, digestExponent = 1.5, minDigestion = 0.55, autoReseed = true, foodRate = 4.2, foodEnergyScale = 1, foodLifetime = 75, dietJumpRate = 0, stableNiches = false } = {}) {
+    this.width = width;
+    this.mutationScale = mutationScale;
+    this.senseCost = senseCost;
+    this.digestExponent = digestExponent;
+    this.minDigestion = minDigestion;
+    this.autoReseed = autoReseed;
+    this.foodRate = foodRate;
+    this.foodEnergyScale = foodEnergyScale;
+    this.foodLifetime = foodLifetime;
+    this.dietJumpRate = dietJumpRate;
+    this.stableNiches = stableNiches;
+    this.height = height;
+    this.seed = seed >>> 0;
+    this.rng = mulberry32(this.seed);
+    this.reset(this.seed);
+  }
+
+  rand(a = 1, b = 0) { return b + this.rng() * (a - b); }
+
+  reset(seed = this.seed) {
+    this.seed = seed >>> 0;
+    this.rng = mulberry32(this.seed);
+    this.simTime = 0;
+    this.season = 0;
+    this.nextId = 1;
+    this.blobs = [];
+    this.foods = [];
+    this.births = 0;
+    this.deaths = 0;
+    this.extinctions = 0;
+    for (let i = 0; i < 34; i++) this.spawnBlob();
+    this.addFood(145);
+    this.initial = this.snapshot();
+  }
+
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  foodPatch(kind = null) {
+    const phase = this.season % 3;
+    const centers = this.stableNiches ?
+      (phase === 0 ? [[.24,.30],[.76,.70]] :
+       phase === 1 ? [[.30,.66],[.70,.34]] :
+                     [[.22,.50],[.78,.50]]) :
+      (phase === 0 ? [[.25,.30],[.75,.70]] :
+       phase === 1 ? [[.72,.26],[.30,.74]] :
+                     [[.30,.68],[.70,.32]]);
+    const k = kind ?? (this.rng() < .5 ? 0 : 1);
+    const c = centers[k];
+    const spread = Math.min(this.width, this.height) * .12;
+    return {
+      x: clamp(c[0] * this.width + this.rand(-spread, spread), 8, this.width - 8),
+      y: clamp(c[1] * this.height + this.rand(-spread, spread), 8, this.height - 8),
+      kind:k
+    };
+  }
+
+  addFood(n = 1, rich = false, around = null) {
+    for (let i = 0; i < n; i++) {
+      const p = around ? {
+        x: clamp(around.x + this.rand(34, -34), 0, this.width),
+        y: clamp(around.y + this.rand(34, -34), 0, this.height),
+        kind:this.rng() < .5 ? 0 : 1
+      } : this.foodPatch();
+      this.foods.push({ x:p.x, y:p.y, e:(rich ? this.rand(18,12) : this.rand(11,6)) * this.foodEnergyScale, rich, kind:rich ? -1 : p.kind, expiresAt:this.simTime + this.foodLifetime });
+    }
+  }
+
+  digestion(g, kind) {
+    if (kind === -1) return 1;
+    const alignment = kind === 0 ? (1-g.diet)/2 : (1+g.diet)/2;
+    return .25 + 1.75*Math.pow(alignment,this.digestExponent);
+  }
+
+  makeGenome(parent) {
+    if (!parent) {
+      return {
+        hue: this.rand(360,0),
+        speed: this.rand(1.15,.65),
+        sense: this.rand(95,42),
+        size: this.rand(6.5,3.5),
+        eff: this.rand(1.15,.78),
+        wander: this.rand(1.1,.35),
+        diet: this.rand(1,-1)
+      };
+    }
+    const ms = this.mutationScale;
+    const m = (v,s,a,b) => clamp(v + this.rand(s*ms,-s*ms), a, b);
+    const dietStep = (ms > 0 && this.rng() < this.dietJumpRate) ? .9 : .16;
+    return {
+      hue: wrapHue(parent.hue + this.rand(20*ms,-20*ms)),
+      speed: m(parent.speed,.12,.35,1.9),
+      sense: m(parent.sense,10,20,150),
+      size: m(parent.size,.6,2.4,9),
+      eff: m(parent.eff,.08,.55,1.45),
+      wander: m(parent.wander,.12,.15,1.5),
+      diet: m(parent.diet ?? 0,dietStep,-1,1)
+    };
+  }
+
+  spawnBlob(x = this.rand(this.width,0), y = this.rand(this.height,0), genome = null, generation = 0, energy = 70, countBirth = false) {
+    const g = genome || this.makeGenome();
+    this.blobs.push({
+      id:this.nextId++, x, y, vx:this.rand(1,-1), vy:this.rand(1,-1), a:this.rand(Math.PI*2,0),
+      g, energy, age:0, generation, reproCooldown:0
+    });
+    if (countBirth) this.births++;
+  }
+
+  updateBlob(b, dt) {
+    b.age += dt;
+    b.reproCooldown = Math.max(0, b.reproCooldown - dt);
+    let target = null;
+    let best = Infinity;
+    const sense2 = b.g.sense * b.g.sense;
+    for (const f of this.foods) {
+      const dx = f.x - b.x, dy = f.y - b.y;
+      const d = dx*dx + dy*dy;
+      if (d > sense2) continue;
+      const digestion = this.digestion(b.g,f.kind);
+      if (digestion < this.minDigestion) continue;
+      const score = d / Math.max(.12,digestion*digestion);
+      if (score < best) { best = score; target = f; }
+    }
+
+    let ax = 0, ay = 0;
+    if (target) {
+      const dx = target.x-b.x, dy = target.y-b.y, len = Math.hypot(dx,dy) || 1;
+      ax = dx/len; ay = dy/len;
+    } else {
+      b.a += this.rand(.8,-.8) * b.g.wander * dt;
+      ax = Math.cos(b.a); ay = Math.sin(b.a);
+    }
+
+    const sp = 38*b.g.speed/(0.65+0.055*b.g.size);
+    b.vx += ax*sp*dt*1.7;
+    b.vy += ay*sp*dt*1.7;
+    const vlen = Math.hypot(b.vx,b.vy) || 1;
+    if (vlen > sp) { b.vx = b.vx/vlen*sp; b.vy = b.vy/vlen*sp; }
+    b.vx *= Math.pow(.18,dt); b.vy *= Math.pow(.18,dt);
+    b.x += b.vx*dt; b.y += b.vy*dt;
+
+    if (b.x < 0) { b.x = 0; b.vx = Math.abs(b.vx); }
+    if (b.y < 0) { b.y = 0; b.vy = Math.abs(b.vy); }
+    if (b.x > this.width) { b.x = this.width; b.vx = -Math.abs(b.vx); }
+    if (b.y > this.height) { b.y = this.height; b.vy = -Math.abs(b.vy); }
+
+    const metabolic = (.62 + .34*b.g.speed*b.g.speed + this.senseCost*b.g.sense + .035*b.g.size*b.g.size) / b.g.eff;
+    b.energy -= metabolic * dt;
+
+    for (let i = this.foods.length - 1; i >= 0; i--) {
+      const f = this.foods[i], rr = b.g.size + 3.3;
+      const dx = f.x - b.x, dy = f.y - b.y;
+      if (dx*dx + dy*dy < rr*rr) {
+        const digestion = this.digestion(b.g,f.kind);
+        if (digestion < this.minDigestion) continue;
+        b.energy += f.e * digestion;
+        this.foods.splice(i,1);
+        break;
+      }
+    }
+
+    const threshold = 118 + b.g.size*3.4;
+    if (b.energy > threshold && b.reproCooldown <= 0 && this.blobs.length < 260) {
+      b.energy *= .52;
+      b.reproCooldown = 3.5;
+      const child = this.makeGenome(b.g);
+      const ang = this.rand(Math.PI*2,0);
+      this.spawnBlob(
+        clamp(b.x + Math.cos(ang)*10,0,this.width),
+        clamp(b.y + Math.sin(ang)*10,0,this.height),
+        child, b.generation+1, b.energy*.92, true
+      );
+    }
+  }
+
+  step(dt = 1/60) {
+    this.simTime += dt;
+    const newSeason = Math.floor(this.simTime/34);
+    if (newSeason !== this.season) { this.season = newSeason; this.addFood(38); }
+
+    const expected = this.foodRate * dt;
+    if (this.rng() < expected) this.addFood(1);
+
+    for (let i=this.foods.length-1;i>=0;i--) {
+      if ((this.foods[i].expiresAt ?? Infinity) <= this.simTime) this.foods.splice(i,1);
+    }
+
+    for (const b of this.blobs) this.updateBlob(b,dt);
+
+    for (let i = this.blobs.length - 1; i >= 0; i--) {
+      const b = this.blobs[i];
+      if (b.energy <= 0 || b.age > 170) {
+        if (this.rng() < .55) this.foods.push({x:b.x,y:b.y,e:this.rand(19,12)*this.foodEnergyScale,rich:true,kind:-1,expiresAt:this.simTime + this.foodLifetime});
+        this.blobs.splice(i,1);
+        this.deaths++;
+      }
+    }
+
+    if (this.blobs.length === 0) {
+      this.extinctions++;
+      if (this.autoReseed) for (let i = 0; i < 12; i++) this.spawnBlob();
+    }
+  }
+
+  catastrophe() {
+    this.foods.splice(0, Math.floor(this.foods.length*.72));
+    for (let i=this.blobs.length-1;i>=0;i--) {
+      if (this.rng() < .48) { this.blobs.splice(i,1); this.deaths++; }
+    }
+  }
+
+  avg(key) {
+    return this.blobs.length ? this.blobs.reduce((s,b)=>s+b.g[key],0)/this.blobs.length : 0;
+  }
+
+  snapshot() {
+    return {
+      seed:this.seed,
+      time:this.simTime,
+      season:this.season,
+      population:this.blobs.length,
+      food:this.foods.length,
+      maxGeneration:this.blobs.reduce((m,b)=>Math.max(m,b.generation),0),
+      births:this.births,
+      deaths:this.deaths,
+      extinctions:this.extinctions,
+      speed:this.avg('speed'),
+      sense:this.avg('sense'),
+      size:this.avg('size'),
+      eff:this.avg('eff'),
+      wander:this.avg('wander'),
+      diet:this.avg('diet'),
+      dietAbs:this.blobs.length ? this.blobs.reduce((s,b)=>s+Math.abs(b.g.diet),0)/this.blobs.length : 0
+    };
+  }
+}
+
+
+
+const canvas = document.getElementById('world');
+const ctx = canvas.getContext('2d');
+const ui = Object.fromEntries([...document.querySelectorAll('[id]')].map(e=>[e.id,e]));
+let W=900,H=700,DPR=1,paused=false,speedMul=1,acc=0;
+let seed = Math.floor(Math.random()*0xffffffff) >>> 0;
+let sim;
+
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);
+  const r=canvas.getBoundingClientRect();
+  W=r.width; H=r.height;
+  canvas.width=Math.max(1,Math.floor(W*DPR));
+  canvas.height=Math.max(1,Math.floor(H*DPR));
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  if(sim) sim.setSize(W,H);
+}
+
+function startWorld(nextSeed=seed){
+  seed=nextSeed>>>0;
+  sim=new Simulation({seed,width:W,height:H,digestExponent:3,minDigestion:.4,foodRate:10,foodLifetime:75,dietJumpRate:.02,stableNiches:true});
+  acc=0;
+}
+
+addEventListener('resize',resize); resize(); startWorld(seed);
+
+function deltaText(value, initial, digits=2){
+  const d=value-initial;
+  const sign=d>0?'+':'';
+  return `${value.toFixed(digits)} (${sign}${d.toFixed(digits)})`;
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const phase=sim.season%3;
+  const centers = phase===0 ? [[.24,.30],[.76,.70]] : phase===1 ? [[.30,.66],[.70,.34]] : [[.22,.50],[.78,.50]];
+  for(const [cx,cy] of centers){
+    const r=Math.min(W,H)*.19;
+    const grad=ctx.createRadialGradient(cx*W,cy*H,0,cx*W,cy*H,r);
+    grad.addColorStop(0,'rgba(78,160,118,.07)'); grad.addColorStop(1,'rgba(78,160,118,0)');
+    ctx.fillStyle=grad; ctx.beginPath();ctx.arc(cx*W,cy*H,r,0,Math.PI*2);ctx.fill();
+  }
+
+  for(const f of sim.foods){
+    ctx.fillStyle=f.rich?'rgba(180,240,210,.95)':(f.kind===0?'rgba(85,185,225,.88)':'rgba(242,172,76,.9)');
+    ctx.beginPath();ctx.arc(f.x,f.y,f.rich?3.5:2.3,0,Math.PI*2);ctx.fill();
+  }
+
+  for(const b of sim.blobs){
+    const g=b.g,v=Math.hypot(b.vx,b.vy),ang=Math.atan2(b.vy,b.vx);
+    const dietHue=115-75*g.diet;
+    ctx.strokeStyle=`hsla(${dietHue},75%,62%,.30)`; ctx.lineWidth=Math.max(1,g.size*.35);
+    ctx.beginPath();ctx.moveTo(b.x-Math.cos(ang)*g.size*.6,b.y-Math.sin(ang)*g.size*.6);
+    ctx.lineTo(b.x-Math.cos(ang)*(g.size+v*.12),b.y-Math.sin(ang)*(g.size+v*.12));ctx.stroke();
+    ctx.strokeStyle=`hsla(${dietHue},65%,68%,.055)`;ctx.lineWidth=1;ctx.beginPath();ctx.arc(b.x,b.y,g.sense,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle=`hsl(${dietHue},72%,58%)`;ctx.beginPath();ctx.arc(b.x,b.y,g.size,0,Math.PI*2);ctx.fill();
+    const e=Math.max(0,Math.min(1,b.energy/140));ctx.fillStyle=`rgba(255,255,255,${.18+.65*e})`;
+    ctx.beginPath();ctx.arc(b.x+g.size*.25,b.y-g.size*.2,Math.max(1.1,g.size*.2),0,Math.PI*2);ctx.fill();
+  }
+
+  const snap=sim.snapshot(), init=sim.initial;
+  ui.pop.textContent=snap.population; ui.gen.textContent=snap.maxGeneration; ui.food.textContent=snap.food;
+  ui.age.textContent=Math.floor(snap.time)+'s'; ui.seed.textContent=String(seed).slice(-6); ui.births.textContent=snap.births;
+  ui.avgSpeed.textContent=deltaText(snap.speed,init.speed,2);
+  ui.avgSense.textContent=deltaText(snap.sense,init.sense,0);
+  ui.avgSize.textContent=deltaText(snap.size,init.size,1);
+  ui.avgEff.textContent=deltaText(snap.eff,init.eff,2);
+  ui.avgDiet.textContent=deltaText(snap.dietAbs,init.dietAbs,2);
+  const nicheA=sim.blobs.filter(b=>b.g.diet<-.5).length, nicheB=sim.blobs.filter(b=>b.g.diet>.5).length, generalists=sim.blobs.length-nicheA-nicheB;
+  ui.overlay.innerHTML=`seed <b>${seed}</b> · sezon <b>${snap.season+1}</b> · nisze <b>${nicheA}/${generalists}/${nicheB}</b><br><span style="color:#8f9aa5">specjalista A / generalista / specjalista B</span>`;
+}
+
+let last=performance.now();
+function frame(now){
+  const raw=Math.min(.05,(now-last)/1000);last=now;
+  if(!paused){
+    acc+=raw*speedMul; const fixed=1/60; let guard=0;
+    while(acc>=fixed && guard++<20){sim.step(fixed);acc-=fixed;}
+  }
+  draw();requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+ui.pause.onclick=()=>{paused=!paused;ui.pause.textContent=paused?'Wznów':'Pauza'};
+ui.reset.onclick=()=>startWorld(seed);
+ui.newSeed.onclick=()=>startWorld((Math.random()*0xffffffff)>>>0);
+ui.burst.onclick=()=>sim.addFood(50);
+ui.catastrophe.onclick=()=>sim.catastrophe();
+ui.speed.oninput=e=>{speedMul=+e.target.value;ui.speedLabel.textContent=speedMul+'×'};
+canvas.addEventListener('pointerdown',e=>{
+  const r=canvas.getBoundingClientRect();sim.addFood(18,false,{x:e.clientX-r.left,y:e.clientY-r.top});
+});
+</script>
+</body>
+</html>

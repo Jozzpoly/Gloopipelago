@@ -1,15 +1,19 @@
 # Gloopipelago
 
-Canonical repository for **Gloopipelago**, a living evolution observatory.
+**Gloopipelago** is a living evolution observatory: a small spatial world where simple organisms and their environment can create legible evolutionary histories, while the same underlying world remains experimentally inspectable enough that surprising outcomes can be investigated instead of merely narrated.
 
-## Authority status
+## Current authority state
 
-This repository has been intentionally bootstrapped with a minimal `main` branch. The historical V1 artifact and M0 oracle qualification are not yet promoted to `main`.
+- **M0 — Freeze / Executable Oracle: PASS** in the qualified Node/V8 runtime.
+- **M1 — Pure Mirror: not started on this branch.**
+- M2+ remains unauthorized.
 
-Current implementation campaign:
+The frozen historical V1 artifact is preserved exactly at `archive/v1/gloopipelago_single.html`.
 
-`M0 Freeze / Executable Oracle -> M1 Pure Mirror`
+Start with:
 
-Production implementation beyond the qualified M0/M1 commitment slice is not authorized yet.
+- `docs/CURRENT_STATE.md`
+- `evidence/m0/M0_QUALIFICATION_REPORT.md`
+- `evidence/m0/PROCESS_SEMANTICS_V1.md`
 
-The frozen historical V1 artifact must be preserved exactly and qualified before any refactor becomes authoritative.
+The living world is primary. Causal apparatus is enabling infrastructure; it must not become the product identity.
