@@ -20,15 +20,11 @@ jobs:
         run: |
           node --version
           sha256sum src/core/v1-mirror.mjs
-      - name: Long baseline
-        run: node tools/living-interest-audit.mjs baseline > living-interest-baseline.json
-      - name: Existing-knob matrix
-        run: node tools/living-interest-audit.mjs matrix > living-interest-matrix.json
+      - name: Selected long-horizon follow-up
+        run: node tools/living-interest-long-selected.mjs > living-interest-long-selected.json
       - name: Upload evidence
         uses: actions/upload-artifact@v4
         with:
-          name: living-world-interest-audit
-          path: |
-            living-interest-baseline.json
-            living-interest-matrix.json
+          name: living-world-interest-long-selected
+          path: living-interest-long-selected.json
           if-no-files-found: error
