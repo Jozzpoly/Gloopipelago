@@ -1,0 +1,27 @@
+name: Fast-forward readiness audit
+
+on:
+  push:
+    branches:
+      - audit/m3-fast-forward-readiness-2026-09-10
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+      - name: Verify protected M0 core
+        run: node tools/m0.mjs verify
+      - name: Run fast-forward readiness audit
+        run: |
+          mkdir -p audit-results
+          node tools/fast-forward-readiness-audit.mjs | tee audit-results/fast-forward-readiness.json
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fast-forward-readiness-audit
+          path: audit-results/fast-forward-readiness.json
