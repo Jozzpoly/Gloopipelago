@@ -1,5 +1,6 @@
 const LOGICAL_WORLD_WIDTH = 900;
 const LOGICAL_WORLD_HEIGHT = 700;
+const POINTER_WORLD_QUANTUM = 1e-9;
 
 function computeViewTransform(viewWidth, viewHeight, worldWidth = LOGICAL_WORLD_WIDTH, worldHeight = LOGICAL_WORLD_HEIGHT) {
   if (!Number.isFinite(worldWidth) || !Number.isFinite(worldHeight) || worldWidth <= 0 || worldHeight <= 0) {
@@ -32,19 +33,29 @@ function worldToView(x, y, transform) {
   };
 }
 
+function canonicalWorldCoordinate(value, max) {
+  const quantized = Math.round(value / POINTER_WORLD_QUANTUM) * POINTER_WORLD_QUANTUM;
+  return Math.max(0, Math.min(max, quantized));
+}
+
 function viewToWorld(x, y, transform) {
   const { scale, offsetX, offsetY, worldWidth, worldHeight } = transform;
   if (!(scale > 0)) return null;
 
-  const wx = (x - offsetX) / scale;
-  const wy = (y - offsetY) / scale;
-  if (wx < 0 || wy < 0 || wx > worldWidth || wy > worldHeight) return null;
-  return { x: wx, y: wy };
+  const rawX = (x - offsetX) / scale;
+  const rawY = (y - offsetY) / scale;
+  if (rawX < 0 || rawY < 0 || rawX > worldWidth || rawY > worldHeight) return null;
+
+  return {
+    x: canonicalWorldCoordinate(rawX, worldWidth),
+    y: canonicalWorldCoordinate(rawY, worldHeight),
+  };
 }
 
 export {
   LOGICAL_WORLD_WIDTH,
   LOGICAL_WORLD_HEIGHT,
+  POINTER_WORLD_QUANTUM,
   computeViewTransform,
   worldToView,
   viewToWorld,
