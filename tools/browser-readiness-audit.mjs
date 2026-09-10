@@ -91,16 +91,25 @@ const narrow1 = await fullState();
 assert.equal(narrow1.serial, wide.serial, 'paused wide -> narrow resize changed authoritative state');
 await page.screenshot({path:path.join(OUT,'narrow.png')});
 
+// Change only deviceScaleFactor. Preserve whether the application notices this naturally as evidence.
 await page.setViewport({width:390,height:600,deviceScaleFactor:2});
 await new Promise(r=>setTimeout(r,100));
-const narrow2 = await fullState();
-assert.equal(narrow2.serial, narrow1.serial, 'pure DPR-only change changed authoritative state');
-assert.equal(narrow2.canvas.rect.width, narrow1.canvas.rect.width, 'DPR-only changed CSS canvas width');
-assert.equal(narrow2.canvas.rect.height, narrow1.canvas.rect.height, 'DPR-only changed CSS canvas height');
-assert(narrow2.canvas.width > narrow1.canvas.width, 'DPR-only did not increase backing width');
+const narrow2Natural = await fullState();
+assert.equal(narrow2Natural.serial, narrow1.serial, 'pure DPR-only change changed authoritative state');
+assert.equal(narrow2Natural.canvas.rect.width, narrow1.canvas.rect.width, 'DPR-only changed CSS canvas width');
+assert.equal(narrow2Natural.canvas.rect.height, narrow1.canvas.rect.height, 'DPR-only changed CSS canvas height');
+const dprDetectedNaturally = narrow2Natural.controller.DPR === 2 && narrow2Natural.canvas.width > narrow1.canvas.width;
 
-const bandX = narrow2.canvas.rect.left + narrow2.canvas.rect.width/2;
-const bandY = narrow2.canvas.rect.top + Math.max(2, narrow2.controller.view.offsetY/2);
+// Now explicitly invoke the existing resize listener to separate handler correctness from DPR-change detection.
+await page.evaluate(() => dispatchEvent(new Event('resize')));
+await new Promise(r=>setTimeout(r,100));
+const narrow2Handled = await fullState();
+assert.equal(narrow2Handled.serial, narrow1.serial, 'explicit DPR resize handling changed authoritative state');
+assert.equal(narrow2Handled.controller.DPR, 2, 'resize handler did not ingest current DPR');
+assert(narrow2Handled.canvas.width > narrow1.canvas.width, 'resize handler did not increase backing width for DPR2');
+
+const bandX = narrow2Handled.canvas.rect.left + narrow2Handled.canvas.rect.width/2;
+const bandY = narrow2Handled.canvas.rect.top + Math.max(2, narrow2Handled.controller.view.offsetY/2);
 const beforeBand = await fullState();
 await page.mouse.click(bandX, bandY);
 await new Promise(r=>setTimeout(r,40));
@@ -108,8 +117,8 @@ const afterBand = await fullState();
 assert.equal(afterBand.food, beforeBand.food, 'narrow letterbox click changed food');
 assert.equal(afterBand.rngState, beforeBand.rngState, 'narrow letterbox click consumed RNG');
 
-const worldX = narrow2.canvas.rect.left + narrow2.controller.view.offsetX + narrow2.controller.view.displayWidth/2;
-const worldY = narrow2.canvas.rect.top + narrow2.controller.view.offsetY + narrow2.controller.view.displayHeight/2;
+const worldX = narrow2Handled.canvas.rect.left + narrow2Handled.controller.view.offsetX + narrow2Handled.controller.view.displayWidth/2;
+const worldY = narrow2Handled.canvas.rect.top + narrow2Handled.controller.view.offsetY + narrow2Handled.controller.view.displayHeight/2;
 await page.mouse.click(worldX, worldY);
 await new Promise(r=>setTimeout(r,40));
 const afterWorld = await fullState();
@@ -135,19 +144,24 @@ const afterDebt = await fullState();
 const after40To1 = {target:1,wallSeconds:debtWallSeconds,simulatedSeconds:afterDebt.simTime-beforeDebt.simTime,achievedMultiplier:(afterDebt.simTime-beforeDebt.simTime)/debtWallSeconds,backlogStartSeconds:beforeDebt.controller.acc,backlogEndSeconds:afterDebt.controller.acc};
 
 const receipt = {
-  format:'gloopipelago-real-browser-readiness-audit',schema:1,
+  format:'gloopipelago-real-browser-readiness-audit',schema:2,
   browser:{executablePath,version:await browser.version()},
   buildReceipt,
   resize:{
     wide:{viewport:[1400,800],dpr:wide.dpr,canvas:wide.canvas,view:wide.controller.view},
     narrowDpr1:{viewport:[390,600],dpr:narrow1.dpr,canvas:narrow1.canvas,view:narrow1.controller.view,stateEqualToWide:narrow1.serial===wide.serial},
-    narrowDpr2:{viewport:[390,600],dpr:narrow2.dpr,canvas:narrow2.canvas,view:narrow2.controller.view,stateEqualToDpr1:narrow2.serial===narrow1.serial},
+    dprOnlyNatural:{viewport:[390,600],browserDpr:narrow2Natural.dpr,controllerDpr:narrow2Natural.controller.DPR,canvas:narrow2Natural.canvas,stateEqualToDpr1:narrow2Natural.serial===narrow1.serial,detectedByApplication:dprDetectedNaturally},
+    dprOnlyAfterExplicitResize:{viewport:[390,600],browserDpr:narrow2Handled.dpr,controllerDpr:narrow2Handled.controller.DPR,canvas:narrow2Handled.canvas,stateEqualToDpr1:narrow2Handled.serial===narrow1.serial,handlerCorrect:true},
     wideReturn:{viewport:[1400,800],dpr:wideReturn.dpr,canvas:wideReturn.canvas,view:wideReturn.controller.view,stateEqualBeforeResize:wideReturn.serial===preWideReturn.serial},
   },
   pointer:{narrowBandNoop:afterBand.food===beforeBand.food && afterBand.rngState===beforeBand.rngState,narrowWorldFoodDelta:afterWorld.food-beforeBand.food},
   speed:{fourX,forced40X,after40To1},
+  findings:[
+    ...(dprDetectedNaturally?[]:[{severity:'M3_CONTRACT_GAP',id:'DPR_CHANGE_DETECTION',detail:'Browser DPR changed at fixed CSS viewport without application resize handling; existing resize handler is correct when explicitly invoked.'}]),
+  ],
   screenshots:['wide.png','narrow.png'],
-  status:'PASS',
+  harnessStatus:'PASS',
+  productStatus:dprDetectedNaturally?'NO_GAP_FOUND_IN_THIS_SCOPE':'GAP_FOUND',
   claim:'Headless real-Chromium mechanics/readiness evidence; not Owner product-feel evidence.'
 };
 fs.writeFileSync(path.join(OUT,'browser-readiness.json'),JSON.stringify(receipt,null,2));
