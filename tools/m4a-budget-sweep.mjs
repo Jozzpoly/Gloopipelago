@@ -3,7 +3,7 @@ import { createM4Simulation } from '../src/core/m4-ecological-mosaic.mjs';
 
 const M4Simulation = createM4Simulation(Simulation);
 const DT = 1/60;
-const HORIZON = 900;
+const HORIZON = Number(process.env.M4A_HORIZON || 900);
 const SEEDS = [1, 0x12345678, 956866913, 0x9e3779b9, 42424242];
 const PROFILES = [
   { name:'lean', founderCount:54, initialFoodCount:225, foodRate:15.5 },
