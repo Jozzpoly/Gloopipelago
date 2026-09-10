@@ -1,10 +1,12 @@
+import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
 import { Simulation } from '../src/core/v1-mirror.mjs';
 import { BROWSER_CONFIG, FIXED_DT } from './m0/lib.mjs';
 
 function syntheticLoad(population, food, seed = 0xC0FFEE) {
   const sim = new Simulation({ seed, width:900, height:700, ...BROWSER_CONFIG, foodRate:0, foodLifetime:1e12 });
-  sim.simTime = 100;
+  // Stay well inside season 2 for the full warmup + measurement window so no seasonal food injection occurs.
+  sim.simTime = 80;
   sim.season = 2;
   sim.births = Math.max(0,population-34);
   sim.deaths = 0;
@@ -16,20 +18,24 @@ function syntheticLoad(population, food, seed = 0xC0FFEE) {
     energy:1e12,age:0,generation:i%14,reproCooldown:1e12,
     g:{hue:(i*29)%360,speed:.45+(i%23)/20,sense:30+(i%121),size:2.5+(i%13)*.5,eff:.6+(i%17)*.04,wander:.2+(i%12)*.1,diet:-1+2*(i%41)/40}
   }));
-  // Keep food far outside sensing/collision range so B×F traversal cost remains stable without consumption.
+  // Keep food far outside sensing/collision range so B×F traversal cost stays constant.
   sim.foods = Array.from({length:food},(_,i)=>({x:1000000+i*3,y:1000000+i*5,e:8,rich:false,kind:i%2,expiresAt:1e12}));
   sim.initial = sim.snapshot();
   return sim;
 }
 
-function measure(population, food, ticks=180, reps=3) {
+function measure(population, food, ticks=240, reps=5) {
   const rows=[];
   for(let rep=0;rep<reps;rep++){
     const sim=syntheticLoad(population,food,0xC0FFEE+rep);
-    for(let i=0;i<30;i++) sim.step(FIXED_DT);
+    for(let i=0;i<60;i++) sim.step(FIXED_DT);
+    assert.equal(sim.blobs.length,population,'warmup changed synthetic population');
+    assert.equal(sim.foods.length,food,'warmup changed synthetic food count');
     const t0=performance.now();
     for(let i=0;i<ticks;i++) sim.step(FIXED_DT);
     const ms=performance.now()-t0;
+    assert.equal(sim.blobs.length,population,'measurement changed synthetic population');
+    assert.equal(sim.foods.length,food,'measurement changed synthetic food count');
     const stepsPerSecond=ticks/(ms/1000);
     rows.push({rep,ms,stepsPerSecond,equivalentRealtimeMultiplier:stepsPerSecond/60,finalPopulation:sim.blobs.length,finalFood:sim.foods.length});
   }
@@ -43,13 +49,14 @@ const matrix=[];
 for(const p of populations) for(const f of foods) matrix.push(measure(p,f));
 
 const receipt={
-  format:'gloopipelago-core-load-surface-audit',schema:1,
+  format:'gloopipelago-core-load-surface-audit',schema:2,
+  controls:{seasonStable:true,foodRate:0,foodCountInvariant:true,populationInvariant:true,warmupTicks:60,measurementTicks:240,repetitions:5},
   matrix,
   interpretation:{
     targetRealtimeMultiplier:40,
     rowsAtOrAbove40:matrix.filter(r=>r.medianRealtimeMultiplier>=40).map(r=>({population:r.population,food:r.food,median:r.medianRealtimeMultiplier})),
     rowsBelow40:matrix.filter(r=>r.medianRealtimeMultiplier<40).map(r=>({population:r.population,food:r.food,median:r.medianRealtimeMultiplier})),
-    warning:'Node/V8 synthetic traversal ceiling only; not a browser achieved-speed guarantee.'
+    warning:'Node/V8 controlled traversal ceiling only; not a browser achieved-speed guarantee.'
   }
 };
 console.log(JSON.stringify(receipt,null,2));
