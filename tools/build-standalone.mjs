@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PREFIX = path.join(ROOT, 'src/browser/shell-prefix.html');
 const CORE = path.join(ROOT, 'src/core/v1-mirror.mjs');
+const VIEW = path.join(ROOT, 'src/browser/view-transform.mjs');
 const APP = path.join(ROOT, 'src/browser/app.mjs');
 const TAIL = path.join(ROOT, 'src/browser/shell-tail.html');
 const OUT = path.join(ROOT, 'dist/gloopipelago.html');
@@ -17,9 +18,10 @@ const sha256 = b => crypto.createHash('sha256').update(b).digest('hex');
 function buildText() {
   const prefix = fs.readFileSync(PREFIX, 'utf8');
   const core = fs.readFileSync(CORE, 'utf8').trimEnd() + '\n\n';
+  const viewTransform = fs.readFileSync(VIEW, 'utf8').trimEnd() + '\n\n';
   const app = fs.readFileSync(APP, 'utf8');
   const tail = fs.readFileSync(TAIL, 'utf8');
-  return { text: prefix + core + app + tail, prefix, core, app, tail };
+  return { text: prefix + core + viewTransform + app + tail, prefix, core, viewTransform, app, tail };
 }
 
 function syntaxCheck(text) {
@@ -37,16 +39,18 @@ function syntaxCheck(text) {
 function receipt(parts) {
   return {
     format:'gloopipelago-standalone-build-receipt',
-    schema:1,
+    schema:2,
     sources:{
       prefix:'src/browser/shell-prefix.html',
       core:'src/core/v1-mirror.mjs',
+      viewTransform:'src/browser/view-transform.mjs',
       app:'src/browser/app.mjs',
       tail:'src/browser/shell-tail.html'
     },
     output:'dist/gloopipelago.html',
     prefixSha256:sha256(Buffer.from(parts.prefix)),
     coreSha256:sha256(fs.readFileSync(CORE)),
+    viewTransformSha256:sha256(Buffer.from(parts.viewTransform.trimEnd() + '\n')),
     appSha256:sha256(Buffer.from(parts.app)),
     tailSha256:sha256(Buffer.from(parts.tail)),
     outputSha256:sha256(Buffer.from(parts.text)),

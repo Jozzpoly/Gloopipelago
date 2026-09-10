@@ -1,23 +1,29 @@
 const canvas = document.getElementById('world');
 const ctx = canvas.getContext('2d');
 const ui = Object.fromEntries([...document.querySelectorAll('[id]')].map(e=>[e.id,e]));
-let W=900,H=700,DPR=1,paused=false,speedMul=1,acc=0;
+let W=900,H=700,DPR=1,view=computeViewTransform(W,H),paused=false,speedMul=1,acc=0;
 let seed = Math.floor(Math.random()*0xffffffff) >>> 0;
 let sim;
 
+const currentDpr=()=>Math.min(2,globalThis.devicePixelRatio||1);
+
 function resize(){
-  DPR=Math.min(2,devicePixelRatio||1);
+  DPR=currentDpr();
   const r=canvas.getBoundingClientRect();
   W=r.width; H=r.height;
   canvas.width=Math.max(1,Math.floor(W*DPR));
   canvas.height=Math.max(1,Math.floor(H*DPR));
+  view=computeViewTransform(W,H);
   ctx.setTransform(DPR,0,0,DPR,0,0);
-  if(sim) sim.setSize(W,H);
+}
+
+function syncPresentationDpr(){
+  if(currentDpr()!==DPR) resize();
 }
 
 function startWorld(nextSeed=seed){
   seed=nextSeed>>>0;
-  sim=new Simulation({seed,width:W,height:H,digestExponent:3,minDigestion:.4,foodRate:10,foodLifetime:75,dietJumpRate:.02,stableNiches:true});
+  sim=new Simulation({seed,width:LOGICAL_WORLD_WIDTH,height:LOGICAL_WORLD_HEIGHT,digestExponent:3,minDigestion:.4,foodRate:10,foodLifetime:75,dietJumpRate:.02,stableNiches:true});
   acc=0;
 }
 
@@ -30,14 +36,17 @@ function deltaText(value, initial, digits=2){
 }
 
 function draw(){
+  ctx.setTransform(DPR,0,0,DPR,0,0);
   ctx.clearRect(0,0,W,H);
+  ctx.setTransform(DPR*view.scale,0,0,DPR*view.scale,DPR*view.offsetX,DPR*view.offsetY);
+
   const phase=sim.season%3;
   const centers = phase===0 ? [[.24,.30],[.76,.70]] : phase===1 ? [[.30,.66],[.70,.34]] : [[.22,.50],[.78,.50]];
   for(const [cx,cy] of centers){
-    const r=Math.min(W,H)*.19;
-    const grad=ctx.createRadialGradient(cx*W,cy*H,0,cx*W,cy*H,r);
+    const r=Math.min(LOGICAL_WORLD_WIDTH,LOGICAL_WORLD_HEIGHT)*.19;
+    const grad=ctx.createRadialGradient(cx*LOGICAL_WORLD_WIDTH,cy*LOGICAL_WORLD_HEIGHT,0,cx*LOGICAL_WORLD_WIDTH,cy*LOGICAL_WORLD_HEIGHT,r);
     grad.addColorStop(0,'rgba(78,160,118,.07)'); grad.addColorStop(1,'rgba(78,160,118,0)');
-    ctx.fillStyle=grad; ctx.beginPath();ctx.arc(cx*W,cy*H,r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=grad; ctx.beginPath();ctx.arc(cx*LOGICAL_WORLD_WIDTH,cy*LOGICAL_WORLD_HEIGHT,r,0,Math.PI*2);ctx.fill();
   }
 
   for(const f of sim.foods){
@@ -71,6 +80,7 @@ function draw(){
 
 let last=performance.now();
 function frame(now){
+  syncPresentationDpr();
   const raw=Math.min(.05,(now-last)/1000);last=now;
   if(!paused){
     acc+=raw*speedMul; const fixed=1/60; let guard=0;
@@ -87,5 +97,7 @@ ui.burst.onclick=()=>sim.addFood(50);
 ui.catastrophe.onclick=()=>sim.catastrophe();
 ui.speed.oninput=e=>{speedMul=+e.target.value;ui.speedLabel.textContent=speedMul+'×'};
 canvas.addEventListener('pointerdown',e=>{
-  const r=canvas.getBoundingClientRect();sim.addFood(18,false,{x:e.clientX-r.left,y:e.clientY-r.top});
+  const r=canvas.getBoundingClientRect();
+  const worldPoint=viewToWorld(e.clientX-r.left,e.clientY-r.top,view);
+  if(worldPoint) sim.addFood(18,false,worldPoint);
 });
