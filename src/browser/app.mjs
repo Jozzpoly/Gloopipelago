@@ -2,17 +2,28 @@ const canvas = document.getElementById('world');
 const ctx = canvas.getContext('2d');
 const ui = Object.fromEntries([...document.querySelectorAll('[id]')].map(e=>[e.id,e]));
 let W=900,H=700,DPR=1,view=computeViewTransform(W,H),paused=false,speedMul=1,acc=0;
+let dprMediaQuery=null;
 let seed = Math.floor(Math.random()*0xffffffff) >>> 0;
 let sim;
 
+function onDprChange(){resize();}
+function watchDpr(){
+  if(typeof globalThis.matchMedia!=='function') return;
+  dprMediaQuery?.removeEventListener?.('change',onDprChange);
+  const rawDpr=globalThis.devicePixelRatio||1;
+  dprMediaQuery=globalThis.matchMedia(`(resolution: ${rawDpr}dppx)`);
+  dprMediaQuery.addEventListener?.('change',onDprChange,{once:true});
+}
+
 function resize(){
-  DPR=Math.min(2,devicePixelRatio||1);
+  DPR=Math.min(2,globalThis.devicePixelRatio||1);
   const r=canvas.getBoundingClientRect();
   W=r.width; H=r.height;
   canvas.width=Math.max(1,Math.floor(W*DPR));
   canvas.height=Math.max(1,Math.floor(H*DPR));
   view=computeViewTransform(W,H);
   ctx.setTransform(DPR,0,0,DPR,0,0);
+  watchDpr();
 }
 
 function startWorld(nextSeed=seed){
