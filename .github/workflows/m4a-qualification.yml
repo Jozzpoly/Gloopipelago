@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  qualify:
+  protected:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,21 +19,71 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.16.0
-      - name: Record runtime and protected core
-        run: |
-          node --version
-          sha256sum src/core/v1-mirror.mjs
+      - name: Verify protected core hash
+        run: test "$(sha256sum src/core/v1-mirror.mjs | cut -d' ' -f1)" = "18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56"
+      - name: M4a construction and determinism
+        run: node tools/m4a-final.mjs construction > m4a-construction.json
       - name: Protected M0 oracle
         run: node tools/m0.mjs verify
       - name: Protected M1.1 maintained core
-        run: node tools/m11.mjs verify
-      - name: M4a 1800s ecological budget falsification
-        env:
-          M4A_HORIZON: 1800
-        run: node tools/m4a-budget-sweep.mjs > m4a-budget-1800.json
-      - name: Upload long-horizon evidence
+        run: |
+          node tools/m11.mjs verify
+          node tools/m11.mjs counts > m11-rng-counts.json
+          node tools/m11.mjs restore > m11-restore.json
+      - name: Protected M2a witness passivity and semantics
+        run: |
+          node tools/m2a.mjs parity off > m2a-off.json
+          node tools/m2a.mjs parity collector > m2a-collector.json
+          node tools/m2a.mjs parity no-retain > m2a-no-retain.json
+          node tools/m2a.mjs parity throwing > m2a-throwing.json
+          node tools/m2a.mjs parity mutating > m2a-mutating.json
+          node tools/m2a.mjs specimens > m2a-specimens.json
+          node tools/m2a.mjs adversarial > m2a-adversarial.json
+      - name: Upload protected evidence
         uses: actions/upload-artifact@v4
         with:
-          name: m4a-budget-1800
-          path: m4a-budget-1800.json
+          name: m4a-protected
+          path: |
+            m4a-construction.json
+            m11-rng-counts.json
+            m11-restore.json
+            m2a-*.json
+          if-no-files-found: error
+
+  ecology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - name: Final 8-seed ecology plus 3 long extensions
+        run: node tools/m4a-final.mjs ecology > m4a-ecology.json
+      - name: Upload ecology evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: m4a-ecology
+          path: m4a-ecology.json
+          if-no-files-found: error
+
+  adaptation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - name: Final paired dense-diffuse adaptation control
+        run: node tools/m4a-final.mjs adaptation > m4a-adaptation.json
+      - name: Upload adaptation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: m4a-adaptation
+          path: m4a-adaptation.json
           if-no-files-found: error
