@@ -1,0 +1,95 @@
+name: Honest x40 qualification
+
+on:
+  push:
+    branches:
+      - x40-honest-fast-forward-2026-09-10
+  workflow_dispatch:
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+
+      - name: Record runtime
+        run: |
+          node --version
+          node -p "process.versions.v8"
+
+      - name: x40 causal/source qualification
+        run: node tools/x40.mjs > x40-qualification.json
+
+      - name: Repaired M3 maintained qualification
+        run: node tools/m3.mjs qualify > m3-qualification.json
+
+      - name: M0 oracle regression
+        run: node tools/m0.mjs verify
+
+      - name: M1.1 maintained-core regression
+        run: node tools/m11.mjs verify
+
+      - name: M1.1 RNG accounting
+        run: node tools/m11.mjs counts > m11-rng-counts.json
+
+      - name: M2a witness OFF parity
+        run: node tools/m2a.mjs parity off > m2a-off.txt
+
+      - name: M2a witness collector parity
+        run: node tools/m2a.mjs parity collector > m2a-collector.txt
+
+      - name: M2a adversarial witness parity
+        run: |
+          node tools/m2a.mjs parity throwing > m2a-throwing.txt
+          node tools/m2a.mjs parity mutating > m2a-mutating.txt
+          node tools/m2a.mjs adversarial > m2a-adversarial.json
+
+      - name: M2a semantic specimens
+        run: node tools/m2a.mjs specimens > m2a-specimens.json
+
+      - name: Prepare real Chromium gates
+        run: |
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+          which google-chrome || which google-chrome-stable || which chromium || which chromium-browser
+
+      - name: Repaired M3 real-browser gate on composite candidate
+        run: node tools/m3-browser.mjs > m3-browser-console.json
+
+      - name: x40 real-browser qualification
+        run: node tools/x40-browser.mjs > x40-browser-console.json
+
+      - name: Deterministic standalone build
+        run: |
+          node tools/build-standalone.mjs build > candidate-build.json
+          node tools/build-standalone.mjs verify > candidate-build-verify.json
+
+      - name: Upload qualification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: x40-qualification
+          path: |
+            x40-qualification.json
+            x40-browser-console.json
+            x40-browser-results/x40-browser-qualification.json
+            m3-qualification.json
+            m3-browser-console.json
+            m3-browser-results/m3-browser-qualification.json
+            candidate-build.json
+            candidate-build-verify.json
+            m11-rng-counts.json
+            m2a-off.txt
+            m2a-collector.txt
+            m2a-throwing.txt
+            m2a-mutating.txt
+            m2a-adversarial.json
+            m2a-specimens.json
+            dist/gloopipelago.html
+          if-no-files-found: error
