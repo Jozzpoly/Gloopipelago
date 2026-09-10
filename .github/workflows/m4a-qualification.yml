@@ -26,11 +26,13 @@ jobs:
         run: node tools/m0.mjs verify
       - name: Protected M1.1 maintained core
         run: node tools/m11.mjs verify
-      - name: M4a ecological budget sweep
-        run: node tools/m4a-budget-sweep.mjs > m4a-budget-sweep.json
-      - name: Upload sweep evidence
+      - name: M4a 1800s ecological budget falsification
+        env:
+          M4A_HORIZON: 1800
+        run: node tools/m4a-budget-sweep.mjs > m4a-budget-1800.json
+      - name: Upload long-horizon evidence
         uses: actions/upload-artifact@v4
         with:
-          name: m4a-budget-sweep
-          path: m4a-budget-sweep.json
+          name: m4a-budget-1800
+          path: m4a-budget-1800.json
           if-no-files-found: error
