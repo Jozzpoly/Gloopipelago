@@ -1,0 +1,36 @@
+name: M4a ecological mosaic qualification
+
+on:
+  push:
+    branches:
+      - m4a-ecological-mosaic-implementation
+  workflow_dispatch:
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - name: Record runtime and protected core
+        run: |
+          node --version
+          sha256sum src/core/v1-mirror.mjs
+      - name: Protected M0 oracle
+        run: node tools/m0.mjs verify
+      - name: Protected M1.1 maintained core
+        run: node tools/m11.mjs verify
+      - name: M4a ecological budget sweep
+        run: node tools/m4a-budget-sweep.mjs > m4a-budget-sweep.json
+      - name: Upload sweep evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: m4a-budget-sweep
+          path: m4a-budget-sweep.json
+          if-no-files-found: error
