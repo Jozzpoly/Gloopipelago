@@ -1,0 +1,66 @@
+name: M3 implementation qualification
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use M0 qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+
+      - name: Record runtime
+        run: |
+          node --version
+          node -p "process.versions.v8"
+
+      - name: M3 qualification
+        run: node tools/m3.mjs qualify > m3-qualification.json
+
+      - name: M0 oracle regression
+        run: node tools/m0.mjs verify
+
+      - name: M1.1 maintained-core regression
+        run: node tools/m11.mjs verify
+
+      - name: M1.1 RNG accounting
+        run: node tools/m11.mjs counts > m11-rng-counts.json
+
+      - name: M2a witness OFF parity
+        run: node tools/m2a.mjs parity off > m2a-off.txt
+
+      - name: M2a witness collector parity
+        run: node tools/m2a.mjs parity collector > m2a-collector.txt
+
+      - name: M2a adversarial witness parity
+        run: |
+          node tools/m2a.mjs parity throwing > m2a-throwing.txt
+          node tools/m2a.mjs parity mutating > m2a-mutating.txt
+          node tools/m2a.mjs adversarial > m2a-adversarial.json
+
+      - name: M2a semantic specimens
+        run: node tools/m2a.mjs specimens > m2a-specimens.json
+
+      - name: Upload qualification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: m3-implementation-qualification
+          path: |
+            m3-qualification.json
+            m11-rng-counts.json
+            m2a-off.txt
+            m2a-collector.txt
+            m2a-throwing.txt
+            m2a-mutating.txt
+            m2a-adversarial.json
+            m2a-specimens.json
+            dist/gloopipelago.html
+          if-no-files-found: error
