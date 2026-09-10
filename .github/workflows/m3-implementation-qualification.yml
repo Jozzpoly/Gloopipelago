@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use M0 qualification Node runtime
         uses: actions/setup-node@v4
@@ -49,12 +51,26 @@ jobs:
       - name: M2a semantic specimens
         run: node tools/m2a.mjs specimens > m2a-specimens.json
 
+      - name: Build exact baseline and candidate products
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          node tools/build-standalone.mjs build > candidate-build.json
+          git worktree add /tmp/gloop-m3-baseline "$BASE_SHA"
+          (cd /tmp/gloop-m3-baseline && node tools/build-standalone.mjs build > "$GITHUB_WORKSPACE/baseline-build.json")
+
+      - name: Render-controller performance sentinel
+        run: node tools/m3-performance.mjs compare /tmp/gloop-m3-baseline/dist/gloopipelago.html dist/gloopipelago.html > m3-performance.json
+
       - name: Upload qualification evidence
         uses: actions/upload-artifact@v4
         with:
           name: m3-implementation-qualification
           path: |
             m3-qualification.json
+            m3-performance.json
+            baseline-build.json
+            candidate-build.json
             m11-rng-counts.json
             m2a-off.txt
             m2a-collector.txt
