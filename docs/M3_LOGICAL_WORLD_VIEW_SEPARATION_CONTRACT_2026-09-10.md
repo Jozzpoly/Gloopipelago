@@ -1,7 +1,7 @@
 # Gloopipelago — M3 Logical World / View Separation Contract
 
 **Date:** 2026-09-10  
-**Status:** **DRAFT / RED-TEAMED CONTRACT / GEOMETRY AUTHORITY NOT YET SELECTED / IMPLEMENTATION NOT AUTHORIZED**
+**Status:** **RED-TEAMED / GEOMETRY AUTHORITY SELECTED / READY FOR AUTHORITY PROMOTION / IMPLEMENTATION NOT YET AUTHORIZED**
 
 ## 1. Purpose
 
@@ -43,17 +43,22 @@ Existing M0 evidence already demonstrates material sensitivity. For the same see
 - `390x600` (`P-COMPACT`): 178 births, 124 deaths, population 88, food 16;
 - `900x700` (`P-NOMINAL-S12345678`): 197 births, 130 deaths, population 101, food 15.
 
-This is not a controlled claim that either geometry is biologically better. It is sufficient evidence that selecting a canonical geometry changes the experiment and must be explicit.
+The dedicated M3 feasibility campaign later expanded this to 21 seeds x 3 geometries and confirmed that the effect is broad rather than a single-seed artifact. See `evidence/m3/M3_GEOMETRY_FEASIBILITY_REPORT.md`.
+
+This evidence does not rank one geometry as biologically “best”. It proves that selecting canonical geometry defines the experiment and therefore requires explicit authority.
 
 ## 4. Authority model after M3
 
-The intended authority split is:
-
 ### Logical world
 
-An explicit logical width/height pair is chosen before `Simulation` construction and remains unchanged by browser viewport resize.
+The first M3 browser epoch uses the explicit canonical logical geometry:
 
-Browser Reset / New Seed reuse the currently selected logical geometry unless a future explicit world-geometry control intentionally changes it.
+- `width = 900`;
+- `height = 700`.
+
+These values are selected by `docs/M3_GEOMETRY_AUTHORITY_RECEIPT_2026-09-10.md` and remain unchanged by browser viewport resize.
+
+Browser Reset / New Seed reuse 900x700. A future explicit world-geometry control may intentionally select another logical geometry, but that would be a model/apparatus intervention rather than a presentation resize.
 
 ### View
 
@@ -75,69 +80,55 @@ It must not call `Simulation.setSize()` or mutate any other authoritative simula
 
 It remains a legitimate explicit world-semantic intervention for headless tests and future experiments unless a later model decision removes/replaces it. Historical `P-RESIZE` remains preserved as a V1 provenance specimen.
 
-Browser viewport resize and explicit logical-world resize must become distinct operations.
+Browser viewport resize and explicit logical-world resize become distinct operations.
 
-## 5. Canonical logical geometry is intentionally unresolved in this draft
+## 5. Canonical logical geometry: 900x700
 
-No exact browser logical size is authorized yet.
+The bounded geometry-feasibility campaign is complete and the Geometry Authority Receipt selects 900x700.
 
-`900x700` is the leading provenance-backed candidate because it is the core default and is used by the nominal/intervention/low-productivity M0 specimens. That is a reason to test it, not sufficient authority to promote it.
+Selection evidence:
 
-`390x600` and `1400x800` are already qualified historical viewport geometries and provide useful sensitivity anchors.
+- exact-source GitHub Actions run `34421980063`: **completed / success**;
+- exact promoted M2a core SHA-256 `18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56`;
+- 4/4 existing M0 exact full-state + RNG reference validations PASS before novel measurements;
+- 21 unique seeds, including nine Owner-evidence seeds;
+- 390x600 / 900x700 / 1400x800;
+- 12,000 ticks per run;
+- 63/63 lifecycle accounting checks PASS;
+- no extinction in the bounded horizon;
+- materially different population/resource/RNG histories across geometries.
 
-The final contract must include a **Geometry Authority Receipt** before implementation is authorized. That receipt must record:
+900x700 is selected by **provenance and qualification depth**, not by optimizing observed ecological outcomes:
 
-- candidate dimensions considered;
-- why the selected geometry is canonical for the maintained browser product;
-- sensitivity evidence across multiple fixed seeds;
-- which differences are expected consequences of geometry rather than regressions;
-- any rejected alternative and why.
+- it is the `Simulation` default;
+- it is the browser controller's bootstrap W/H reference before viewport replacement;
+- six of eight M0 profiles start at 900x700, including both nominal profiles, explicit intervention and both low-productivity profiles;
+- it sits between the compact and wide historical anchors and avoids inventing a fourth rectangle;
+- no candidate demonstrated a universal biological advantage that would justify overriding the existing nominal authority.
 
-M3 does not attempt to normalize ecology across arbitrary world sizes by scaling food, founder count, speed, sense or other biology. That would be a separate model change.
+The M1.2 Owner receipt does not preserve exact CSS canvas dimensions, so capture resolution is not reverse-engineered into logical-world authority.
 
-## 6. Bounded geometry-feasibility probe required before promotion
+M3 does not normalize ecology across arbitrary world sizes by scaling food, founder count, speed, sense or other biology. That would be a separate model change.
 
-Before this contract can become implementation authority, run a deterministic headless geometry probe using the current M2a-promoted core.
+## 6. Geometry-feasibility evidence
 
-Minimum candidate geometries:
+Reproducible tool: `tools/m3-geometry.mjs`.
 
-- 390x600;
-- 900x700;
-- 1400x800.
+Authoritative report: `evidence/m3/M3_GEOMETRY_FEASIBILITY_REPORT.md`.
 
-Minimum seed set must contain the existing representative seeds:
+Exact-source execution receipt:
 
-- `1`;
-- `0x12345678`;
-- `0x9E3779B9`.
+- run `34421980063` — completed / success;
+- head `5698bc866cc63ba28e1d79178ea7585280ddc960`;
+- artifact id `10131234964`;
+- artifact archive digest `sha256:6d268714be5a70c6c2e3579851a4509de071f8fd64b87a264d6de890b0b49a62`;
+- extracted JSON SHA-256 `7b59981c4190789b2ff77a0e3b664e276bd3e461d99fcbe422e1098ae6dbb2b5`.
 
-Prefer a larger deterministic seed set if cheap, but do not turn geometry selection into an open-ended ecology study.
-
-For each seed/geometry, run the browser model config with fixed `1/60` stepping through at least 12,000 ticks (200 simulated seconds) and record:
-
-- exact final causal fingerprint;
-- RNG call count/state;
-- births;
-- deaths;
-- population;
-- food;
-- maximum living generation;
-- lifecycle witness counts;
-- extinction count;
-- optional coarse trait summaries already available from `snapshot()`.
-
-Purpose of the probe:
-
-- demonstrate sensitivity magnitude and pathologies;
-- establish that the chosen canonical geometry is deliberate;
-- avoid pretending different geometries should converge biologically;
-- provide an evidence-backed selection, not optimize a biological objective after observing whichever outcome looks nicest.
-
-No new biology or density normalization may be introduced in this probe.
+The campaign's purpose was sensitivity/authority selection, not ecology tuning. Its result is sufficient to close geometry selection for the first M3 epoch.
 
 ## 7. View transform
 
-The default M3 presentation rule should be **uniform aspect-preserving contain** unless product evidence falsifies it.
+M3 presentation uses **uniform aspect-preserving contain**.
 
 Rationale:
 
@@ -147,11 +138,11 @@ Rationale:
 
 Define:
 
-- `scale = min(viewWidth / worldWidth, viewHeight / worldHeight)`;
-- displayed world size = `worldWidth*scale` by `worldHeight*scale`;
+- `scale = min(viewWidth / 900, viewHeight / 700)`;
+- displayed world size = `900*scale` by `700*scale`;
 - centered offsets fill the remaining view area.
 
-Letterbox/pillarbox regions are presentation-only and must not create world space.
+Letterbox/pillarbox regions are presentation-only and do not create world space.
 
 DPR affects the backing buffer and rendering sharpness only; it must not enter logical coordinate calculations.
 
@@ -195,9 +186,9 @@ Default implementation presumption: **no production change to `src/core/v1-mirro
 
 The core already accepts explicit world dimensions and already exposes explicit `setSize()` world semantics. The coupling lives primarily in browser ownership.
 
-Any proposed core change must therefore justify itself independently and re-open the protected core gate. Convenience refactoring is not sufficient.
+Any proposed core change must justify itself independently and re-open the protected core gate. Convenience refactoring is not sufficient.
 
-M2a lifecycle witness semantics must remain unchanged.
+M2a lifecycle witness semantics remain unchanged.
 
 ## 11. Protected semantics
 
@@ -227,14 +218,14 @@ M3 changes browser world/view authority only.
 
 Because explicit `Simulation(width,height)` and explicit `setSize()` remain model semantics, the protected M2a/M1.1/M0 headless campaigns must remain exact on their historical profiles, including `P-COMPACT`, `P-WIDE` and `P-RESIZE`.
 
-If the core is untouched, these should remain strict regressions rather than being rebaselined.
+If the core is untouched, these remain strict regressions rather than being rebaselined.
 
 ### B. Browser viewport invariance — non-negotiable
 
 Construct paired browser/controller harness runs with:
 
 - same seed;
-- same canonical logical geometry;
+- same canonical 900x700 logical geometry;
 - same logical interventions;
 - different initial viewport dimensions;
 - materially different resize histories.
@@ -246,7 +237,7 @@ At deterministic checkpoints require exact equality of:
 - snapshot values;
 - M2a lifecycle observation sequence when a test harness attaches a witness.
 
-Minimum view histories should include:
+Minimum view histories:
 
 1. stable wide view;
 2. stable compact/tall view;
@@ -258,7 +249,7 @@ A view resize must produce zero authoritative-state delta at the resize boundary
 
 ### C. Initial viewport independence
 
-Two worlds with the same seed and canonical logical geometry but different initial canvas sizes must begin with exact identical authoritative state and RNG state.
+Two worlds with the same seed and 900x700 logical geometry but different initial canvas sizes must begin with exact identical authoritative state and RNG state.
 
 This distinguishes full M3 from a partial freeze-on-start implementation.
 
@@ -275,9 +266,9 @@ Test at least:
 
 ### E. Rendering geometry
 
-Non-causal rendering tests should verify that known logical points map to expected canvas coordinates and that circles/radii remain isotropic under the uniform transform.
+Non-causal rendering tests verify that known logical points map to expected canvas coordinates and that circles/radii remain isotropic under the uniform transform.
 
-This may use a small deterministic transform helper rather than screenshot pixel tests if that gives a stronger, simpler contract.
+Prefer a small deterministic transform helper contract over brittle screenshot-pixel equality when it provides stronger evidence.
 
 ### F. Product regression
 
@@ -285,7 +276,7 @@ Build determinism and Node DOM/canvas contract smoke must pass.
 
 A real-browser Owner smoke is required before M3 promotion because M3 intentionally changes browser resize/view behavior and may introduce letterboxing/pillarboxing even when biology is correct.
 
-Owner smoke should include at least:
+Owner smoke must include at least:
 
 - desktop wide;
 - narrow/mobile-like viewport;
@@ -295,28 +286,31 @@ Owner smoke should include at least:
 - pause/speed/catastrophe controls;
 - visual confirmation that the whole logical world remains legible.
 
+If presentation is materially poor, causal PASS alone does not authorize promotion. Revisit the explicit M3 view/geometry decision rather than silently restoring viewport coupling.
+
 ### G. Intentional-divergence receipt
 
 The final M3 qualification must state clearly:
 
 - historical browser V1/M2a was viewport-coupled;
-- M3 browser product is not expected to reproduce historical browser causal trajectories when historical viewport geometry differs from the new canonical logical geometry;
+- M3 browser product is not expected to reproduce historical browser causal trajectories when historical viewport geometry differs from 900x700;
 - headless historical profiles remain preserved and exact because explicit geometry remains part of model apparatus;
 - within M3, viewport size alone no longer has causal authority.
 
 Do not call M3 “V1-exact” without this scope qualifier.
 
-## 13. Feasibility staging
+## 13. Implementation staging
 
-A disposable or test-only **freeze-on-start** probe may be used during contract work:
+A test-only freeze-on-start experiment may still be used to isolate view-transform mechanics, but it is not a milestone and is not promotable as M3.
 
-- capture initial viewport dimensions once as logical geometry;
-- stop propagating later resize into `sim.setSize()`;
-- add a view transform around that frozen logical rectangle.
+The implementation target from the start remains full separation:
 
-This can validate rendering/pointer mechanics while preserving each run's initial historical geometry.
+- browser constructs the world at canonical 900x700;
+- view resize never mutates world geometry;
+- render uses an explicit contain transform;
+- pointer interventions map through its inverse.
 
-However it is **not promotable as the full M3 result**, because initial viewport authority remains. Do not let a successful partial probe silently redefine the milestone.
+Do not let a successful partial probe silently redefine the milestone.
 
 ## 14. M2a role in M3
 
@@ -342,13 +336,17 @@ Do not use M3 to implement x10/x20+ fast-forward. That remains a separate featur
 
 ### Rejected: just remove `sim.setSize()` from `resize()`
 
-This removes resize-time authority but leaves initial viewport authority. Useful as a probe, incomplete as M3.
+This removes resize-time authority but leaves initial viewport authority. Incomplete as M3.
 
-### Rejected: use `Simulation` default 900x700 because it already exists
+### Rejected: choose 900x700 merely because it is the default
 
-The default is provenance for a candidate, not proof of correct browser ecology. Existing goldens already show geometry-dependent outcomes.
+The default alone was insufficient. The dedicated exact-source 21-seed x 3-geometry campaign first demonstrated sensitivity and ruled out treating any candidate as neutral. 900x700 is selected only after that campaign, using provenance/qualification depth as the tie-breaker rather than observed biological attractiveness.
 
-### Rejected: preserve viewport aspect by stretching logical coordinates
+### Rejected: infer canonical world geometry from Owner recording resolution
+
+The Owner smoke receipt does not preserve exact CSS canvas dimensions. Recording resolution is not an authority receipt for logical geometry.
+
+### Rejected: preserve viewport fill by stretching logical coordinates
 
 Non-uniform scaling distorts spatial interpretation and visualizes circles/radii as ellipses.
 
@@ -374,15 +372,17 @@ These are real Owner needs but would expand the blast radius of the first intent
 
 ## 17. Promotion boundary
 
-This draft does **not** authorize M3 implementation yet.
+All predeclared contract prerequisites are now satisfied:
 
-Contract promotion requires:
+1. bounded geometry-feasibility probe — **PASS**;
+2. Geometry Authority Receipt — **900x700 selected**;
+3. transform/pointer/qualification red-team — **complete at contract level**;
+4. scope check — **no runtime/biology feature implementation in this contract slice**.
 
-1. completion of the bounded geometry-feasibility probe;
-2. a Geometry Authority Receipt selecting the canonical logical geometry with explicit rationale;
-3. final red-team of the qualification matrix and transform/pointer rules;
-4. exact confirmation that no unrelated feature/biology work entered the contract.
+This contract is therefore **ready for authority promotion**.
 
-Only after those conditions are committed and the contract is promoted may a fresh M3 implementation branch begin.
+Merging the contract authorizes only a fresh bounded **M3 implementation branch** from the resulting live `main`.
 
-M3 implementation promotion later authorizes another integration/boundary review only. It does not automatically authorize M2b, RNG stream splitting, scheduler revision, fast-forward, new heredity/ecology or broader simulation architecture.
+The implementation must then satisfy the full qualification matrix above before M3 can be promoted. M3 implementation promotion later authorizes another integration/boundary review only.
+
+This contract does not authorize M2b, RNG stream splitting, scheduler revision, x10/x20 fast-forward, seed UX, new heredity/ecology or broader simulation architecture.
