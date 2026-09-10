@@ -1,165 +1,90 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-10  
-**State:** **M0/M1/B0/M2a PROMOTED / M3 REPAIR MACHINE PASS / x40 MACHINE PASS / M4a ECOLOGY FULL MACHINE PASS / M4b LIVING WORLD LEGIBILITY FULL MACHINE + INTERNAL VISUAL PASS / COMPOSITE OWNER GATE PENDING / M3+x40+M4 NOT YET PROMOTED / M2b DEFERRED.**
-
-## Project identity
-
-Gloopipelago is a **living evolution observatory**. The living world is primary; causal apparatus exists to make its evolution understandable, reproducible and safely extensible.
+**State:** **M0/M1/B0/M2a PROMOTED / M3 REPAIR MACHINE PASS / x40 MACHINE PASS / M4a ECOLOGICAL MOSAIC FULL MACHINE PASS / M4b LIVING WORLD LEGIBILITY FULL MACHINE + INTERNAL VISUAL PASS / POST-M4 M5a PROBE NO-GO / COMPOSITE OWNER PRODUCT GATE NEXT / M3+x40+M4 NOT YET PROMOTED / M2b DEFERRED.**
 
 ## Live authority
 
-Repository:
+Repository: `Jozzpoly/Gloopipelago`
 
-`Jozzpoly/Gloopipelago`
-
-Live `main` verified 2026-09-10:
+Live `main` remains:
 
 `bd8bfab5079bb1d1f596f9621d98ac522571b75a`
 
-`main` remains promoted implementation authority. Green CI on stacked branches does not make those branches live authority.
+Green stacked branches are qualified candidates, not live authority.
 
-Frozen historical artifact:
+Frozen V1:
 
-`archive/v1/gloopipelago_single.html`
-
-SHA-256:
-
-`ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8`
-
-Do not edit or rebaseline it.
-
-## Promoted foundation
-
-M0 / M1 / B0 / M2a are **PROMOTED**.
+`archive/v1/gloopipelago_single.html`  
+SHA-256 `ededf979b857f795a93f8d019ab3fc6364df0156885f381050641ab30ffff1d8`
 
 Promoted maintained-core SHA-256:
 
 `18e7ed7dea643008eeaa7e0c037708a23e9fcdf0c78d1dcb825aa5bc9a497c56`
 
-M2a lifecycle witness remains passive/detached. `Simulation` retains no lifecycle history. M2b retained history remains deferred.
+M2b retained history remains deferred.
 
-## Current stacked product lineage
+## Qualified stacked product lineage
 
-All current product layers remain draft and unmerged pending a composite Owner gate.
+All four implementation layers remain **open / draft / unmerged** pending one broad Owner product gate.
 
-1. **PR #11 — M3 repaired world/view separation**  
+1. **PR #11 — repaired M3 world/view separation**  
    branch `m3-logical-world-view-implementation`  
-   base `main`  
-   open / draft / mergeable  
-   exact repaired qualification head `1411f46831aad00e579c6cf03f36b7fcef1b1001`
+   exact qualified runtime `1411f46831aad00e579c6cf03f36b7fcef1b1001`
 
 2. **PR #12 — honest x40 fast-forward**  
    branch `x40-honest-fast-forward-2026-09-10`  
-   base M3 branch  
-   open / draft / mergeable  
-   exact x40 qualification head `2081e4a1462a52fe20b4c3f8a60ef54a968977ed`
+   exact qualified runtime `2081e4a1462a52fe20b4c3f8a60ef54a968977ed`
 
 3. **PR #13 — M4a Ecological Mosaic**  
    branch `m4a-ecological-mosaic-implementation`  
-   base x40 branch  
-   open / draft / mergeable  
-   exact M4a product qualification head `1a0f585f32249989e3e3781693f46c0bd74aefbd`
+   exact qualified product `1a0f585f32249989e3e3781693f46c0bd74aefbd`
 
-4. **M4b — Living World Legibility**  
+4. **PR #14 — M4b Living World Legibility**  
    branch `m4b-living-world-legibility-2026-09-10`  
-   based on cleaned M4a state  
-   FULL MACHINE + INTERNAL VISUAL PASS  
-   PR pending closeout/boundary review.
+   exact qualified product `0b1e53a1e82a1bbf046d1fcc4eec4a2adf41ac52`
 
-Promotion, if later authorized by Owner evidence, must preserve dependency order.
+Live verification after PR creation showed #11/#12/#13/#14 mergeable; do not merge yet.
 
-## M3 — world/view authority
+## Exact next Owner candidate
 
-M3 separates logical world semantics from presentation geometry.
+Use the standalone produced by accepted M4b v2 run `34477849280`.
 
-Maintained principles:
+SHA-256:
 
-- viewport/CSS/DPR are presentation-only;
-- browser resize does not call `Simulation.setSize()`;
-- aspect-preserving centered `contain`;
-- outside bands have no pointer authority;
-- pointer maps view coordinates back into logical-world coordinates;
-- pure DPR changes update presentation backing without changing causal state.
+`656ede3b409d9d2f3f4a5445b3e1a526c7c6c799be83d6245d42c1272799af6f`
 
-Detailed authority/evidence:
+Size: `33,989 bytes`.
 
-- `docs/M3_LOGICAL_WORLD_VIEW_SEPARATION_CONTRACT_2026-09-10.md`
-- `evidence/m3/M3_DPR_REPAIR_MACHINE_QUALIFICATION_2026-09-10.md`
-- `evidence/m3/M3_OWNER_SMOKE_PARTIAL_2026-09-10.md`
+This exact artifact contains the qualified dependency stack M3 -> x40 -> M4a -> M4b.
 
-The remaining Owner product check is deferred to the final composite candidate rather than obsolete intermediate builds.
+Owner protocol:
 
-## Honest x40 execution
+`evidence/owner/M4_COMPOSITE_OWNER_TEST_PROTOCOL_2026-09-10.md`
 
-x40 preserves exact sequential `Simulation.step(1/60)` and separates simulation throughput from render cadence.
+The Owner gate is principally a living-world/product judgement. Machine correctness is already strongly covered; a negative Owner judgement overrides green CI.
 
-Maintained behavior:
+## What changed since the rejected boring build
 
-- target speed and achieved speed are distinct;
-- main-thread stepping uses bounded CPU slices;
-- retained simulation backlog is bounded;
-- speed/pause/reset/visibility transitions clear historical timing debt;
-- hidden tabs do not evolve or catch up;
-- underachievement is reported rather than hidden;
-- high-speed rendering is decoupled from fixed-step simulation.
+The Owner rejected the earlier product as too small, sparse, homogeneous and environmentally shallow. Skeptical audit confirmed measurable convergence rather than merely presentation taste.
 
-Historical x40 qualification:
+M4a then introduced a separately qualified ecological epoch while keeping historical maintained core bytes unchanged:
 
-`evidence/x40/X40_MACHINE_QUALIFICATION_REPORT_2026-09-10.md`
-
-M4a/M4b independently requalified x40 on richer evolved worlds and still measured near-full target throughput.
-
-## Owner boredom/shallowness finding
-
-The Owner rejected the earlier technically healthy product as too small, sparse, visually homogeneous, behaviorally homogeneous and environmentally shallow.
-
-The subsequent skeptical audit established that the complaint corresponded to measurable structural limitations:
-
-- baseline normalized occupancy ~14.8%;
-- effective coarse strategies fell to ~5.86 by 1,800 s;
-- typically only ~2/34 founder lineages remained;
-- simple tuning could add population or mutation spread without reliably maintaining richer ecology;
-- heterogeneous resource geography could elicit repeatable local phenotype differences using the existing genome/controller.
-
-Canonical audit:
-
-`evidence/living-world/LIVING_WORLD_INTEREST_AUDIT_2026-09-10.md`
-
-## M4a — Ecological Mosaic
-
-**FULL MACHINE PASS / NOT PROMOTED.**
-
-Qualified ecological epoch:
-
-- logical world `1200x900`;
+- world `1200x900`;
 - 66 founders;
 - 275 initial food;
 - 18.5 food/s;
 - cap 260 unchanged;
-- eight stable habitats;
-- A/B resource kinds crossed with dense vs diffuse resource geometry;
-- existing inherited genome and organism controller retained;
-- fixed `1/60` stepping retained;
-- historical maintained core remains byte-identical.
+- 8 stable A/B × dense/diffuse habitats;
+- existing genome/controller;
+- fixed `1/60` stepping;
+- honest x40 retained.
 
-M4 ecology source SHA-256:
+Across 8 predeclared seeds at 1,800 s:
 
-`b4539d91f31c8aa7b2a966244ad8e7b5c851698a7000ba3c3799c70611340c0e`
-
-Final M4a Actions run:
-
-`34473583712` — completed / success
-
-Exact M4a standalone:
-
-`3fb5638006137ecfb7e2d115c38ef981244ac4bd20b4b3b22e42ccdef4ac59ae`
-
-Key 1,800 s result across eight predeclared seeds:
-
-- median occupancy `31.02%`;
-- effective strategies `19.31`;
-- strategy retention 600→1800 `0.839`;
+- median normalized occupancy `31.02%` vs rejected baseline ~14.8%;
+- effective coarse strategies `19.31` vs baseline ~5.86;
+- 600→1800 strategy retention `0.839`;
 - active original founder roots median `3.5`;
 - effective original lineages `2.865`;
 - <=1-lineage collapse `0/8`;
@@ -169,132 +94,100 @@ Key 1,800 s result across eight predeclared seeds:
 
 Three seeds extended to 3,600 s retained `4 / 4 / 3` original founder roots with zero extinctions.
 
-Paired local-adaptation control supports repeatable dense-vs-diffuse phenotype differentiation. After subtracting ordinary spatial sorting, median diffuse-minus-dense effects were approximately:
+Paired local-adaptation control found diffuse-vs-dense effects after subtracting ordinary spatial sorting:
 
 - speed `+0.671`;
 - sense `+16.61`;
 - size `-1.04`;
-- expected sign on all three dimensions `8/8` seeds.
+- expected direction on all three traits `8/8` seeds.
 
-M4a evolved-world x40:
+M4a report:
 
-- 600 s, 8 seeds: median `39.77x`, min `39.66x`;
-- 1,800 s, 3 seeds: median `39.71x`, min `39.70x`.
+`evidence/m4a/M4A_MACHINE_QUALIFICATION_REPORT_2026-09-10.md`
 
-Detailed evidence:
+## M4b presentation result
 
-- `docs/M4_LIVING_WORLD_AMPLIFICATION_CONTRACT_2026-09-10.md`
-- `evidence/m4a/M4A_MACHINE_QUALIFICATION_REPORT_2026-09-10.md`
-- `evidence/m4a/M4A_LAYER_CLOSEOUT_2026-09-10.md`
+M4b is presentation-only and preserves exact M4a causal state/RNG/lifecycle semantics.
 
-## M4b — Living World Legibility
+Rejected v1 remains preserved as a machine-PASS / visual-FAIL specimen. Accepted v2 passed machine qualification and internal visual review.
 
-**FULL MACHINE PASS / INTERNAL VISUAL PASS / NOT PROMOTED.**
+Accepted rendering makes existing model differences easier to see:
 
-M4b is presentation-only. It does not change M4a causal state, ecology, RNG, lifecycle sequence, world geometry or scheduler semantics.
+- diet owns primary body color;
+- size changes silhouette scale;
+- speed changes elongation/trail cue;
+- sense uses a compact omnidirectional, explicitly non-literal cue instead of giant full circles;
+- inherited hue is a secondary accent;
+- habitats render as soft deterministic fields matching the real square support of resource placement.
 
-Predeclared supplement:
+M4b exactness includes 3 seeds × draw cadences 1/7/60 versus no-draw with exact full-state/RNG/lifecycle equality plus 250 repeated real-browser draws with zero state/RNG delta.
 
-`docs/M4B_LIVING_WORLD_LEGIBILITY_SUPPLEMENT_2026-09-10.md`
+M4b evolved-world target-40 performance:
 
-### Rejected iteration 1
-
-Run `34476912597` passed machine tests but failed internal visual review. It is preserved rather than relabeled as success.
-
-Problems:
-
-- habitat fields were almost invisible;
-- forward sensor marks implied directional perception absent from the model;
-- phenotype separation remained too weak at normal/narrow world scale.
-
-Receipt:
-
-`evidence/m4b/M4B_VISUAL_ITERATION_1_REJECTION_2026-09-10.md`
-
-### Accepted iteration 2
-
-Final v2 Actions run:
-
-`34477849280` — **completed / success**
-
-Exact M4b product qualification head:
-
-`0b1e53a1e82a1bbf046d1fcc4eec4a2adf41ac52`
-
-Exact standalone:
-
-- SHA-256 `656ede3b409d9d2f3f4a5445b3e1a526c7c6c799be83d6245d42c1272799af6f`;
-- 33,989 bytes;
-- M4b visuals SHA-256 `13428dc9673803129020d4945cf3b394a9cde3073236d8f24c52bbe1f3b479d8`;
-- M4 ecology SHA remains exact `b4539d91...1340c0e`;
-- maintained core SHA remains exact `18e7ed7...a497c56`.
-
-Machine PASS includes:
-
-- monotonic size/speed/sense visual mapping;
-- diet remains primary body color; inherited hue is secondary accent;
-- 3 seeds × draw cadences 1/7/60 vs no-draw: exact full-state/RNG/lifecycle equality;
-- 250 repeated real-browser draws: exact zero state/RNG delta;
-- exact M4a construction;
-- protected M0/M1.1/M2a smoke;
-- wide/narrow/DPR/pointer/reset/new-seed browser mechanics;
-- deterministic standalone;
-- no page errors.
-
-M4b evolved-world x40:
-
-- 600 s, 8 seeds: median **39.06x**, minimum **38.02x**;
-- 1,800 s, 3 seeds: median **39.35x**, minimum **38.87x**;
-- 40x→1x approximately `0.983x`;
+- 8 seeds after 600 s: median `39.06x`, minimum `38.02x`;
+- 3 seeds after 1,800 s: median `39.35x`, minimum `38.87x`;
+- 40x→1x ~`0.983x`;
 - hidden interval exact zero advance.
 
-Internal visual PASS:
-
-- giant full sense circles no longer dominate the world;
-- compact segmented sense cue is omnidirectional and explicitly non-literal;
-- habitat fields remain visible without debug borders and reflect the true square support of resource placement;
-- size/speed morphology is materially visible in evolved local populations;
-- inherited hue adds secondary identity without obscuring diet;
-- narrow/mobile-like presentation remains readable;
-- exact M4a→M4b comparisons show presentation improvement rather than biological change.
-
-Detailed receipt:
+M4b report:
 
 `evidence/m4b/M4B_QUALIFICATION_AND_VISUAL_REVIEW_2026-09-10.md`
 
-## What M4 still does not solve
+## Post-M4 boundary review — M5a stopped
 
-The current world is substantially richer than the rejected baseline, but M4 remains intentionally bounded.
+Before spending Owner attention, one further high-value hypothesis was challenged on a separate audit branch: could recent exploitation give habitats useful local resource memory?
 
-Still absent:
+Audit branch:
 
-- dynamic depletion/regrowth state for habitats;
-- organism-driven environmental modification / ecological inheritance;
-- predation, social behavior or mating;
-- explicit negative-frequency-dependent fitness rules;
-- retained ancestry/history UI;
-- species classifier/taxonomy;
-- terrain physics or richer material environment.
+`m5a-dynamic-habitat-memory-audit-2026-09-10`
 
-Static habitat geography is now ecologically meaningful and visually legible, but the environment itself does not yet have a persistent evolving history.
+Actions run `34482766108` executed successfully. Memory-disabled instrumentation reproduced exact M4 causal state/RNG, so the probe itself was valid.
 
-## Immediate next step — post-M4 boundary review
+The tested memory family **failed its predeclared product-relevance screen**:
 
-Before asking the Owner to spend attention on another broad test:
+| profile | occupancy-turnover vs M4 | food-turnover vs M4 | strategy diversity vs M4 |
+|---|---:|---:|---:|
+| gentle | `1.109x` | `0.942x` | `1.053x` |
+| medium | `0.988x` | `1.074x` | `1.033x` |
+| strong | `1.071x` | `0.991x` | `0.746x` |
 
-1. freeze/close M4b provenance and open it as a stacked draft layer;
-2. review the original boredom/shallowness complaint against M4a+M4b evidence and exact screenshots;
-3. decide whether the highest-value next action is:
-   - one composite Owner test of M3+x40+M4a+M4b, or
-   - one more **bounded, separately contracted** living-world milestone before Owner testing;
-4. do not add new biology to M4b itself.
+The intended screens were at least `1.15x` habitat-occupancy turnover and `1.20x` habitat-food turnover while preserving ecological quality.
 
-## Promotion rule
+More importantly, scalar productivity mostly saturated at its floor instead of producing useful persistent local cycles:
 
-No M3/x40/M4 implementation layer is promoted yet.
+- gentle: ~96.7% of sampled habitat values within 0.02 of floor;
+- medium: ~99.5%;
+- strong: ~88.8%, with one pathological seed collapsing to population 67, one original founder root and maximum standing food 853.
 
-If a later composite Owner gate is positive, reconcile and promote layers in provenance/dependency order. If the Owner finds a material problem, reopen only the relevant layer and requalify any changed runtime.
+Decision:
 
-## Negative decisions
+**Do not tune or implement this M5a family before Owner testing.** The broader idea of places carrying ecological history remains a future hypothesis, but requires a genuinely new local-resource model rather than disguised parameter tuning.
 
-Do not edit frozen V1. Do not rewrite `v1-mirror.mjs` to absorb M4. Do not restore viewport-driven world sizing. Do not raise population cap merely to make the screen busier. Do not replace fixed `1/60` with a large fast-forward timestep. Do not claim universal 40x. Do not add a Worker without evidence. Do not smuggle predation/sociality/mating/weather/terrain/niche construction into M4b. Do not promote M2b by inertia. Do not merge draft layers before the composite Owner gate is positive.
+Canonical decision:
+
+`evidence/post-m4/POST_M4_BOUNDARY_DECISION_2026-09-10.md`
+
+Full negative audit receipt remains on the audit branch.
+
+## Immediate execution state
+
+**The next move is now Owner-only.**
+
+Do not add another biological milestone before this test. Do not merge the stack yet.
+
+Owner should use the exact M4b v2 standalone and judge primarily:
+
+- whether the world is materially less boring and more worth observing;
+- whether multiple local habitats/populations feel distinct;
+- whether organism differences are perceptible enough to follow;
+- whether x40 reveals meaningful ecological/evolutionary history rather than merely faster noise;
+- whether the larger world still feels too empty/static/shallow;
+- whether wide/narrow presentation and controls remain pleasant enough for experimentation.
+
+If Owner PASS: verify exact provenance and promote #11 -> #12 -> #13 -> #14 in order, checking live ancestry after each merge.
+
+If Owner negative: do not merge; reopen only the implicated layer and preserve this exact candidate/result as historical evidence.
+
+## Explicit negative decisions
+
+Do not edit frozen V1. Do not absorb M4 into `v1-mirror.mjs`. Do not restore viewport-driven world sizing. Do not raise population cap merely to make the screen busier. Do not replace fixed `1/60` with a large fast-forward timestep. Do not claim universal 40x. Do not add a Worker without evidence. Do not insert M2b, predation, sociality, mating, weather, terrain physics, new genes or another habitat-memory attempt before the composite Owner gate.
