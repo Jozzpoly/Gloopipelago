@@ -20,8 +20,19 @@ jobs:
         run: |
           mkdir -p audit-results
           node tools/fast-forward-readiness-audit.mjs | tee audit-results/fast-forward-readiness.json
+      - name: Prepare real Chromium harness
+        run: |
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+          which google-chrome || which google-chrome-stable || which chromium || which chromium-browser
+      - name: Run real-browser readiness audit
+        run: node tools/browser-readiness-audit.mjs | tee audit-results/browser-readiness-console.json
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
         with:
           name: fast-forward-readiness-audit
-          path: audit-results/fast-forward-readiness.json
+          path: |
+            audit-results/fast-forward-readiness.json
+            audit-results/browser-readiness.json
+            audit-results/browser-readiness-console.json
+            audit-results/wide.png
+            audit-results/narrow.png
