@@ -22,6 +22,11 @@ jobs:
           set -o pipefail
           mkdir -p audit-results
           node tools/fast-forward-readiness-audit.mjs | tee audit-results/fast-forward-readiness.json
+      - name: Map core load surface
+        shell: bash
+        run: |
+          set -o pipefail
+          node tools/core-load-surface-audit.mjs | tee audit-results/core-load-surface.json
       - name: Prepare real Chromium harness
         run: |
           npm install --no-save --ignore-scripts puppeteer-core@24.16.0
@@ -37,6 +42,7 @@ jobs:
           name: fast-forward-readiness-audit
           path: |
             audit-results/fast-forward-readiness.json
+            audit-results/core-load-surface.json
             audit-results/browser-readiness.json
             audit-results/browser-readiness-console.json
             audit-results/wide.png
