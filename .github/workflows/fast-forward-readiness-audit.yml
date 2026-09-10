@@ -17,7 +17,9 @@ jobs:
       - name: Verify protected M0 core
         run: node tools/m0.mjs verify
       - name: Run fast-forward readiness audit
+        shell: bash
         run: |
+          set -o pipefail
           mkdir -p audit-results
           node tools/fast-forward-readiness-audit.mjs | tee audit-results/fast-forward-readiness.json
       - name: Prepare real Chromium harness
@@ -25,7 +27,10 @@ jobs:
           npm install --no-save --ignore-scripts puppeteer-core@24.16.0
           which google-chrome || which google-chrome-stable || which chromium || which chromium-browser
       - name: Run real-browser readiness audit
-        run: node tools/browser-readiness-audit.mjs | tee audit-results/browser-readiness-console.json
+        shell: bash
+        run: |
+          set -o pipefail
+          node tools/browser-readiness-audit.mjs | tee audit-results/browser-readiness-console.json
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
         with:
