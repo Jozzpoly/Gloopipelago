@@ -20,11 +20,11 @@ jobs:
         run: |
           node --version
           sha256sum src/core/v1-mirror.mjs
-      - name: Resource-regime local adaptation probe
-        run: node tools/resource-regime-probe.mjs > resource-regime-probe.json
+      - name: Paired resource-regime control
+        run: node tools/resource-regime-controlled-probe.mjs > resource-regime-controlled-probe.json
       - name: Upload evidence
         uses: actions/upload-artifact@v4
         with:
-          name: resource-regime-probe
-          path: resource-regime-probe.json
+          name: resource-regime-controlled-probe
+          path: resource-regime-controlled-probe.json
           if-no-files-found: error
