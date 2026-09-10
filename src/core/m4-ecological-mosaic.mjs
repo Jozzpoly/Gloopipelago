@@ -1,7 +1,7 @@
 const M4_WORLD_WIDTH = 1200;
 const M4_WORLD_HEIGHT = 900;
-const M4_FOUNDER_COUNT = 60;
-const M4_INITIAL_FOOD_COUNT = 250;
+const M4_FOUNDER_COUNT = 66;
+const M4_INITIAL_FOOD_COUNT = 275;
 
 const M4_HABITATS = Object.freeze([
   Object.freeze({ id:'A-dense-1', kind:0, regime:'dense', x:.14, y:.22, spread:.035 }),
@@ -22,7 +22,7 @@ const M4_PRODUCT_OPTIONS = Object.freeze({
   digestExponent:3,
   minDigestion:.4,
   autoReseed:true,
-  foodRate:17,
+  foodRate:18.5,
   foodEnergyScale:1,
   foodLifetime:75,
   dietJumpRate:.02,
