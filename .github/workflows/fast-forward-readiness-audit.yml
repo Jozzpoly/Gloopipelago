@@ -36,6 +36,11 @@ jobs:
         run: |
           set -o pipefail
           node tools/browser-readiness-audit.mjs | tee audit-results/browser-readiness-console.json
+      - name: Probe decoupled fast-forward in Chromium
+        shell: bash
+        run: |
+          set -o pipefail
+          node tools/fast-forward-browser-probe.mjs | tee audit-results/fast-forward-browser-probe-console.json
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
         with:
@@ -45,5 +50,7 @@ jobs:
             audit-results/core-load-surface.json
             audit-results/browser-readiness.json
             audit-results/browser-readiness-console.json
+            audit-results/fast-forward-browser-probe.json
+            audit-results/fast-forward-browser-probe-console.json
             audit-results/wide.png
             audit-results/narrow.png
