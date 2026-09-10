@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-10  
-**State:** **M0 PROMOTED / M1 PROMOTED / B0 PROMOTED / M2a PROMOTED / M3 CONTRACT PROMOTED / M3 IMPLEMENTATION MACHINE PASS / REAL-BROWSER OWNER SMOKE REQUIRED / M3 NOT YET PROMOTED / M2b DEFERRED.**
+**State:** **M0 PROMOTED / M1 PROMOTED / B0 PROMOTED / M2a PROMOTED / M3 CONTRACT PROMOTED / M3 IMPLEMENTATION MACHINE PASS / OWNER SMOKE PARTIAL POSITIVE / RESIZE COMPLETION REQUIRED / M3 NOT YET PROMOTED / M2b DEFERRED.**
 
 ## Project identity
 
@@ -67,7 +67,7 @@ See:
 
 ## M3 implementation
 
-**MACHINE PASS / OWNER BROWSER GATE OPEN / NOT PROMOTED.**
+**MACHINE PASS / OWNER SMOKE PARTIAL POSITIVE / RESIZE COMPLETION REQUIRED / NOT PROMOTED.**
 
 Branch:
 
@@ -132,23 +132,46 @@ The machine campaign also correctly rejected the pre-fix candidate at run `34423
 
 See `evidence/m3/M3_IMPLEMENTATION_MACHINE_QUALIFICATION_REPORT.md`.
 
+## Owner browser evidence
+
+Owner supplied a ~4m47s recording of the exact candidate in a real desktop browser.
+
+**Positive evidence established:**
+
+- stable multi-minute live runtime;
+- strongly wide real-browser contain presentation remains legible;
+- Pause/Wznów;
+- +50 food;
+- Katastrofa;
+- Ten sam seed;
+- Nowy seed;
+- sustained 4x behavior without an obvious responsiveness/stability regression;
+- real-browser pointer boundary behavior: cursor interaction in visible pillarbox produces no visible food insertion while in-world pointer interactions produce immediate local food clusters.
+
+A denser review confirms that the recorded page geometry remains effectively wide and stable throughout the run. Therefore this recording does **not** establish the required substantial live resize from wide to narrow/tall and back.
+
+See `evidence/m3/M3_OWNER_SMOKE_PARTIAL_2026-09-10.md`.
+
 ## Current blocking gate
 
-**Real-browser Owner smoke of the exact candidate is required before M3 promotion.**
+**Only the targeted resize-completion Owner smoke remains before M3 promotion.**
 
-Protocol: `evidence/m3/M3_OWNER_SMOKE_PROTOCOL.md`.
+Required completion:
 
-Primary unresolved product risk is presentation rather than demonstrated causality: full-world contain may create substantial pillarbox/letterbox space on strongly mismatched desktop/mobile aspect ratios. Stretching/cropping must not be introduced silently to hide that risk.
+1. keep the exact candidate/world running;
+2. resize the browser substantially narrow/tall and then wide again;
+3. confirm the same living world continues rather than causally resetting/compressing;
+4. after resize, use `Ten sam seed` once and `Nowy seed` once and confirm complete correct framing.
 
-Owner smoke must check wide/narrow/resized presentation, pointer behavior inside/outside the logical world, Reset/New Seed, ordinary controls and the existing 4x workflow.
+A brief recording or direct positive Owner verdict after performing these steps is sufficient. The optional mobile-like viewport remains non-blocking.
 
 ## Next bounded action
 
-**Owner tests exact candidate `d768b046...8394` in a normal browser.**
+**Complete the short real-browser resize smoke on exact candidate `d768b046...8394`.**
 
-If the real-browser gate is positive, record an Owner receipt, verify subsequent changes are evidence-only relative to the exact runtime candidate, then prepare final M3 promotion/merge.
+If positive, record the final Owner PASS receipt, verify all post-machine commits remain evidence/docs-only relative to the exact runtime candidate, mark PR #11 ready and promote M3 by merge.
 
-If presentation or interaction is materially poor, reopen only the relevant M3 view/product boundary. Do not restore viewport causal authority by convenience.
+If resize presentation or interaction is materially poor, reopen only the relevant M3 view/product boundary. Do not restore viewport causal authority by convenience.
 
 ## Later evidence-backed needs
 
