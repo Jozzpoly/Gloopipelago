@@ -1,0 +1,33 @@
+name: M3 geometry contract probe
+
+on:
+  push:
+    branches:
+      - m3-logical-world-view-contract
+
+jobs:
+  geometry-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use M0 qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+
+      - name: Record runtime
+        run: |
+          node --version
+          node -p "process.versions.v8"
+
+      - name: Run geometry probe
+        run: node tools/m3-geometry.mjs > geometry-feasibility.json
+
+      - name: Upload exact-source result
+        uses: actions/upload-artifact@v4
+        with:
+          name: m3-geometry-feasibility
+          path: geometry-feasibility.json
+          if-no-files-found: error
