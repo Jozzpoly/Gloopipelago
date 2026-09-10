@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
-**Date:** 2026-09-09  
-**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a PROMOTED / POST-M2a INTEGRATION REVIEW REQUIRED / M2b & M3 UNAUTHORIZED.**
+**Date:** 2026-09-10  
+**State:** **M0 PROMOTED / M1 COMPLETE & PROMOTED / B0 PROMOTED / M2a PROMOTED / POST-M2a BOUNDARY REVIEW COMPLETE / M3 CONTRACT & FEASIBILITY AUTHORIZED / M3 IMPLEMENTATION & M2b UNAUTHORIZED.**
 
 ## Project identity
 
@@ -72,22 +72,36 @@ Qualification: collector/no-retain/throwing/mutating 8/8 causal parity, dense di
 
 See `evidence/m2a/M2A_QUALIFICATION_REPORT.md`.
 
+## Post-M2a boundary
+
+See `docs/POST_M2A_BOUNDARY_REVIEW_2026-09-10.md`.
+
+Verdict:
+
+- M2b retention/history is **deferred**; caller-owned M2a collection is sufficient for the next experimental boundary;
+- browser viewport authority is a demonstrated causal/reproducibility confound;
+- logical world geometry is itself ecological semantics, so choosing a fixed rectangle by convenience would be an unqualified model change;
+- M3 Logical World / View Separation is the leading Integration-Spine subject;
+- only M3 contract / feasibility / qualification design is authorized now; runtime implementation still waits for a fresh authority decision.
+
 ## Next bounded action
 
-**Perform the post-M2a integration/boundary review before authorizing any M2b or M3 implementation.**
+**Prepare and red-team the M3 Logical World / View Separation contract.**
 
-M3 logical-world/view separation remains the leading intentional-semantic-change candidate, but it is not yet authorized. M2b retention/history UI is also not automatic.
+The contract must explicitly resolve logical-geometry authority, initial viewport authority versus resize-time authority, view transform, pointer-coordinate mapping, viewport-invariance evidence and intentional-divergence accounting.
+
+M3 implementation remains unauthorized until that contract is promoted. M2b remains unauthorized/deferred.
 
 ## Later evidence-backed needs
 
-Still deliberately outside M2a:
+Still deliberately outside the current M3 contract slice:
 - full/copyable seed and later recent/bookmark workflow;
 - precise living-vs-historical generation labels;
 - functional-vs-UI diet classification;
 - optional sense-ring visibility;
 - true x10/x20+ fast-forward/stress mode with achieved-speed reporting;
-- M3 logical-world/view separation.
+- later retained lineage/history only if a concrete workflow demonstrates the need.
 
 ## Negative decisions
 
-Do not edit frozen V1. Do not clean up Accidental Biology by inertia. During M2a do not split RNG streams, add lineage retention/frameworks, change world semantics, add new ecology/heredity, or bundle Owner UX improvements into the witness slice.
+Do not edit frozen V1. Do not clean up Accidental Biology by inertia. Do not silently select logical world geometry from viewport, core defaults or Owner smoke dimensions without qualification. Do not bundle M2b history, fast-forward, seed UX, classifier wording, scheduler cleanup, RNG splitting or new biology into the M3 boundary merely because adjacent code is being touched.
