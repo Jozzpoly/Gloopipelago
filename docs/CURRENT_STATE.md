@@ -1,7 +1,7 @@
 # Gloopipelago — Current State
 
 **Date:** 2026-09-10  
-**State:** **M0/M1/B0/M2a PROMOTED / M3+x40+M4 TECHNICALLY QUALIFIED BUT OWNER PRODUCT FAIL / DO NOT PROMOTE CURRENT STACK / BIOLOGICAL MODEL REDESIGN NEXT / M2b DEFERRED.**
+**State:** **M0/M1/B0/M2a PROMOTED / M3+x40+M4 TECHNICALLY QUALIFIED BUT OWNER PRODUCT FAIL / CURRENT STACK IS A DONOR CHECKPOINT, NOT A PRODUCT TO PROMOTE / BIOLOGICAL MODEL REDESIGN NEXT / M2b DEFERRED.**
 
 ## Live authority
 
@@ -24,7 +24,7 @@ The current experimental stack remains open/draft/unmerged:
 3. PR #13 — M4a Ecological Mosaic;
 4. PR #14 — M4b Living World Legibility.
 
-The stack contains valuable, separately qualified infrastructure and evidence, but **must not be promoted as the current product** after the Owner result below.
+The stack contains valuable, separately qualified infrastructure and evidence, but **must not be promoted as the current product** after the Owner result below. Treat it as a donor/provenance checkpoint for the redesign.
 
 Exact M4 composite Owner candidate:
 
