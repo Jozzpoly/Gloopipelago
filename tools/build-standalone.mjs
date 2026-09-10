@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PREFIX = path.join(ROOT, 'src/browser/shell-prefix.html');
 const CORE = path.join(ROOT, 'src/core/v1-mirror.mjs');
+const M4 = path.join(ROOT, 'src/core/m4-ecological-mosaic.mjs');
 const VIEW = path.join(ROOT, 'src/browser/view-transform.mjs');
 const APP = path.join(ROOT, 'src/browser/app.mjs');
 const TAIL = path.join(ROOT, 'src/browser/shell-tail.html');
@@ -18,10 +19,11 @@ const sha256 = b => crypto.createHash('sha256').update(b).digest('hex');
 function buildText() {
   const prefix = fs.readFileSync(PREFIX, 'utf8');
   const core = fs.readFileSync(CORE, 'utf8').trimEnd() + '\n\n';
+  const m4 = fs.readFileSync(M4, 'utf8').trimEnd() + '\n\n';
   const viewTransform = fs.readFileSync(VIEW, 'utf8').trimEnd() + '\n\n';
   const app = fs.readFileSync(APP, 'utf8');
   const tail = fs.readFileSync(TAIL, 'utf8');
-  return { text: prefix + core + viewTransform + app + tail, prefix, core, viewTransform, app, tail };
+  return { text: prefix + core + m4 + viewTransform + app + tail, prefix, core, m4, viewTransform, app, tail };
 }
 
 function syntaxCheck(text) {
@@ -39,10 +41,11 @@ function syntaxCheck(text) {
 function receipt(parts) {
   return {
     format:'gloopipelago-standalone-build-receipt',
-    schema:2,
+    schema:3,
     sources:{
       prefix:'src/browser/shell-prefix.html',
       core:'src/core/v1-mirror.mjs',
+      m4:'src/core/m4-ecological-mosaic.mjs',
       viewTransform:'src/browser/view-transform.mjs',
       app:'src/browser/app.mjs',
       tail:'src/browser/shell-tail.html'
@@ -50,6 +53,7 @@ function receipt(parts) {
     output:'dist/gloopipelago.html',
     prefixSha256:sha256(Buffer.from(parts.prefix)),
     coreSha256:sha256(fs.readFileSync(CORE)),
+    m4Sha256:sha256(fs.readFileSync(M4)),
     viewTransformSha256:sha256(Buffer.from(parts.viewTransform.trimEnd() + '\n')),
     appSha256:sha256(Buffer.from(parts.app)),
     tailSha256:sha256(Buffer.from(parts.tail)),
