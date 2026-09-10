@@ -1,7 +1,7 @@
 # Gloopipelago — M3 Owner Browser Smoke (Partial)
 
 **Date:** 2026-09-10  
-**Status:** **PARTIAL POSITIVE OWNER EVIDENCE / PROMOTION GATE STILL OPEN**
+**Status:** **PARTIAL POSITIVE OWNER EVIDENCE / POINTER BOUNDARY POSITIVE / RESIZE COMPLETION STILL REQUIRED / PROMOTION GATE OPEN**
 
 ## Candidate under test
 
@@ -15,7 +15,7 @@ Machine-qualified standalone candidate:
 
 Owner supplied a desktop screen recording approximately 4m47s long at 1918x906 capture resolution.
 
-The recording is positive evidence for the exact M3 candidate, but it does not visibly demonstrate every required minimum-smoke step. It therefore must not be interpreted as a full Owner PASS.
+The recording is strongly positive evidence for the exact M3 candidate, but it does not visibly demonstrate the required substantial live-resize sequence. It therefore must not yet be interpreted as a full Owner PASS.
 
 ## Positive observations visible in the recording
 
@@ -30,26 +30,42 @@ The recording is positive evidence for the exact M3 candidate, but it does not v
 - Simulation speed is moved from 1x to 4x and a substantial later portion of the recording runs at 4x without an obvious responsiveness or stability regression.
 - No visible crash, controller lock-up, malformed frame, or obvious presentation discontinuity is observed in the supplied recording.
 
-## Minimum-smoke requirements not established by this recording
+## Deeper pointer-boundary review
 
-The recording does **not** provide sufficiently clear evidence for the following required gates:
+A second, denser review of the recording was performed rather than relying only on sparse contact frames.
 
-1. A substantial live browser resize from wide to materially narrower/taller and back while preserving the running world/history.
-2. An unambiguous pointer-boundary test where a click clearly inside visible letterbox/pillarbox space produces zero food and a click clearly inside the logical world produces pointer food.
-3. Because (1) is not demonstrated, the protocol-specific check of `Ten sam seed` / `Nowy seed` *after resize* is also not directly established.
+For the recorded wide layout, the canvas/UI boundary is approximately x=1602. With the M3 900x700 contain transform, the visible logical world occupies approximately x=218..1384, leaving substantial real pillarbox bands on both sides.
 
-The optional narrow/mobile-like presentation check is also not visibly covered, but it is not independently blocking.
+The recording contains a sustained cursor dwell clearly in the left pillarbox at approximately x=211, followed by motion back into the logical world. No local food burst appears in the pillarbox. In contrast, multiple cursor-stationary interactions clearly inside the logical world are followed by immediate local food clusters, consistent with pointer-food insertion.
+
+This comparative behavior is accepted as **positive real-browser evidence for the M3 pointer boundary contract**:
+
+- pillarbox interaction produces no visible pointer-food insertion;
+- in-world pointer interaction produces visible food insertion.
+
+The machine qualification already establishes this same boundary exactly at the controller/causal level; the recording now supplies complementary real-browser product evidence.
+
+## Remaining minimum-smoke requirement
+
+The recording does **not** demonstrate a substantial live browser resize from wide to materially narrower/taller and back while preserving the same running world/history.
+
+Dense layout inspection confirms that the recorded page remains at essentially the same wide geometry through the run; there is no hidden material resize sequence that should be credited after the fact.
+
+Because this resize sequence is missing, the protocol-specific check of `Ten sam seed` / `Nowy seed` **after resize** is also still unestablished.
+
+The optional narrow/mobile-like presentation check remains optional and is not independently blocking.
 
 ## Decision
 
 **Do not promote M3 yet.**
 
-This recording materially reduces product risk and is strongly positive Owner evidence, especially for wide-aspect presentation, controls, seed workflows and sustained 4x behavior. The remaining Owner gate should be completed with a short targeted follow-up rather than repeating the full smoke.
+Owner evidence is now positive for wide-aspect presentation, controls, seed workflows, sustained 4x behavior and real-browser inside/outside pointer behavior. The only remaining Owner completion gate is the live-resize path plus one reset/new-seed check after that resize.
 
-A sufficient follow-up can be brief:
+A sufficient final follow-up can be very short:
 
-- resize the same running candidate substantially narrow/tall and back wide;
-- in the mismatched viewport click once clearly in a band and once clearly inside the world;
-- after that resize, trigger `Ten sam seed` and `Nowy seed` once each.
+1. keep the same candidate/world running;
+2. resize the browser substantially narrow/tall and then wide again;
+3. confirm the world continues rather than resetting/compressing causally;
+4. after the resize, trigger `Ten sam seed` once and `Nowy seed` once and confirm both worlds are completely and correctly framed.
 
 If these behave normally and Owner reports no blocking presentation issue, the M3 Owner smoke can be closed as PASS for this exact candidate.
