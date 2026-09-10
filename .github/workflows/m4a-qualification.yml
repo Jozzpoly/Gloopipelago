@@ -87,3 +87,38 @@ jobs:
           name: m4a-adaptation
           path: m4a-adaptation.json
           if-no-files-found: error
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use qualification Node runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - name: Prepare real Chromium gate
+        run: |
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+          which google-chrome || which google-chrome-stable || which chromium || which chromium-browser
+      - name: Maintain x40 execution semantics
+        run: node tools/x40.mjs > m4a-x40-maintained.json
+      - name: Real-browser M4a geometry and evolved x40
+        run: node tools/m4a-browser.mjs > m4a-browser-console.json
+      - name: Verify deterministic standalone candidate
+        run: |
+          node tools/build-standalone.mjs verify > m4a-build-verify.json
+          sha256sum dist/gloopipelago.html > m4a-standalone.sha256
+      - name: Upload browser evidence and exact standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: m4a-browser
+          path: |
+            m4a-x40-maintained.json
+            m4a-browser-console.json
+            m4a-browser-results/m4a-browser-qualification.json
+            m4a-build-verify.json
+            m4a-standalone.sha256
+            dist/gloopipelago.html
+          if-no-files-found: error
