@@ -26,7 +26,7 @@ function mapping(){
   const base={speed:1.1,sense:85,size:5.5,eff:1,wander:.8,diet:0,hue:120};
   const lowSize=m4bPhenotypeVisual({...base,size:2.4});
   const highSize=m4bPhenotypeVisual({...base,size:9});
-  assert(highSize.bodyRadius>lowSize.bodyRadius);
+  assert(highSize.visualRadius>lowSize.visualRadius);
   assert(highSize.bodyLength>lowSize.bodyLength);
   assert(highSize.bodyWidth>lowSize.bodyWidth);
 
@@ -34,11 +34,12 @@ function mapping(){
   const highSpeed=m4bPhenotypeVisual({...base,speed:1.9});
   assert(highSpeed.tailLength>lowSpeed.tailLength);
   assert(highSpeed.bodyLength>lowSpeed.bodyLength);
+  assert(highSpeed.bodyWidth<lowSpeed.bodyWidth,'higher speed should strengthen slender-body speed cue');
 
   const lowSense=m4bPhenotypeVisual({...base,sense:20});
   const highSense=m4bPhenotypeVisual({...base,sense:150});
-  assert(highSense.senseLength>lowSense.senseLength);
-  assert(highSense.senseHalfAngle>lowSense.senseHalfAngle);
+  assert(highSense.senseCueRadius>lowSense.senseCueRadius);
+  assert(highSense.senseArcSpan>lowSense.senseArcSpan);
 
   const diets=[];
   for(let i=0;i<=40;i++) diets.push(m4bPhenotypeVisual({...base,diet:-1+i/20}).dietHue);
@@ -52,17 +53,16 @@ function mapping(){
 
   const dense=m4bHabitatVisual(M4_HABITATS.find(h=>h.regime==='dense'),1200,900);
   const diffuse=m4bHabitatVisual(M4_HABITATS.find(h=>h.regime==='diffuse'),1200,900);
-  assert(dense.coreAlpha>diffuse.coreAlpha,'dense habitat must read stronger than diffuse');
-  assert(dense.radius!==diffuse.radius,'qualified spread difference should remain visible');
+  assert(dense.innerAlpha>diffuse.innerAlpha,'dense habitat must read stronger than diffuse');
+  assert(dense.halfExtent<diffuse.halfExtent,'qualified dense habitat must retain smaller support');
 
   return {status:'PASS',size:{low:lowSize,high:highSize},speed:{low:lowSpeed,high:highSpeed},sense:{low:lowSense,high:highSense},dietHues:{a:diets[0],mid:diets[20],b:diets.at(-1)},accent:{a:hueA.accentHue,b:hueB.accentHue},habitat:{dense,diffuse}};
 }
 
 function noopContext(){
-  const grad=()=>({addColorStop(){}});
   return {
     fillStyle:'',strokeStyle:'',lineWidth:1,lineCap:'butt',
-    createRadialGradient:grad,beginPath(){},arc(){},fill(){},stroke(){},save(){},restore(){},translate(){},rotate(){},ellipse(){},moveTo(){},lineTo(){},
+    beginPath(){},arc(){},fill(){},stroke(){},save(){},restore(){},translate(){},rotate(){},ellipse(){},moveTo(){},lineTo(){},rect(){},roundRect(){},
   };
 }
 
@@ -104,5 +104,5 @@ function causalNeutrality(){
   return {status:'PASS',seeds:seeds.map(x=>x>>>0),cadences,ticks:3600,rows};
 }
 
-const receipt={format:'gloopipelago-m4b-presentation-semantics',schema:1,status:'PASS',sourceBoundary:sourceBoundary(),mapping:mapping(),causalNeutrality:causalNeutrality()};
+const receipt={format:'gloopipelago-m4b-presentation-semantics',schema:2,status:'PASS',sourceBoundary:sourceBoundary(),mapping:mapping(),causalNeutrality:causalNeutrality()};
 console.log(JSON.stringify(receipt,null,2));
