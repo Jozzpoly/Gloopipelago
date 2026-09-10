@@ -13,7 +13,7 @@ const FAST_RENDER_INTERVAL_MS=100;
 const ACHIEVED_SAMPLE_MS=500;
 
 let W=900,H=700,DPR=1,view=computeViewTransform(W,H),paused=false,speedMul=1,acc=0;
-let schedulerLast=performance.now();
+let schedulerLast=performance.now(),pumpHandle=null;
 let achievedWall=schedulerLast,achievedSim=0,achievedSpeed=0;
 let lastFullDraw=-Infinity,forceNextDraw=true;
 let seed = Math.floor(Math.random()*0xffffffff) >>> 0;
@@ -64,6 +64,7 @@ function setSpeedMultiplier(value){
   ui.speedLabel.textContent=speedMul+'×';
   resetSchedulerTiming();
   forceNextDraw=true;
+  wakeSimulationPump();
 }
 
 function setPaused(next){
@@ -71,12 +72,14 @@ function setPaused(next){
   ui.pause.textContent=paused?'Wznów':'Pauza';
   resetSchedulerTiming();
   forceNextDraw=true;
+  wakeSimulationPump();
 }
 
 addEventListener('resize',resize);
 document.addEventListener?.('visibilitychange',()=>{
   resetSchedulerTiming();
   forceNextDraw=true;
+  wakeSimulationPump();
 });
 resize();
 startWorld(seed);
@@ -149,10 +152,16 @@ function updateAchievedSpeed(now){
   }
 }
 
-function schedulePump(delayMs){
-  const handle=setTimeout(simulationPump,delayMs);
-  handle?.unref?.();
+function schedulePump(delayMs,replace=false){
+  if(replace&&pumpHandle!==null) clearTimeout(pumpHandle);
+  pumpHandle=setTimeout(()=>{
+    pumpHandle=null;
+    simulationPump();
+  },delayMs);
+  pumpHandle?.unref?.();
 }
+
+function wakeSimulationPump(){schedulePump(0,true);}
 
 function simulationPump(){
   const now=performance.now();
@@ -201,8 +210,8 @@ schedulePump(0);
 requestAnimationFrame(frame);
 
 ui.pause.onclick=()=>setPaused(!paused);
-ui.reset.onclick=()=>startWorld(seed);
-ui.newSeed.onclick=()=>startWorld((Math.random()*0xffffffff)>>>0);
+ui.reset.onclick=()=>{startWorld(seed);wakeSimulationPump();};
+ui.newSeed.onclick=()=>{startWorld((Math.random()*0xffffffff)>>>0);wakeSimulationPump();};
 ui.burst.onclick=()=>{sim.addFood(50);forceNextDraw=true;};
 ui.catastrophe.onclick=()=>{sim.catastrophe();forceNextDraw=true;};
 ui.speed.oninput=e=>setSpeedMultiplier(e.target.value);
@@ -210,5 +219,6 @@ for(const button of document.querySelectorAll('[data-speed]')) button.onclick=()
 canvas.addEventListener('pointerdown',e=>{
   const r=canvas.getBoundingClientRect();
   const worldPoint=viewToWorld(e.clientX-r.left,e.clientY-r.top,view);
-  if(worldPoint){sim.addFood(18,false,worldPoint);forceNextDraw=true;}
+  if(worldPoint) sim.addFood(18,false,worldPoint);
+  if(worldPoint) forceNextDraw=true;
 });
