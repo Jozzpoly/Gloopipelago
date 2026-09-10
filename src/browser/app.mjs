@@ -92,25 +92,7 @@ function deltaText(value, initial, digits=2){
 }
 
 function drawHabitats(){
-  const minWorld=Math.min(LOGICAL_WORLD_WIDTH,LOGICAL_WORLD_HEIGHT);
-  for(const habitat of M4_HABITATS){
-    const half=minWorld*habitat.spread;
-    const x=habitat.x*LOGICAL_WORLD_WIDTH;
-    const y=habitat.y*LOGICAL_WORLD_HEIGHT;
-    const dense=habitat.regime==='dense';
-    const alpha=dense?.085:.035;
-    const strokeAlpha=dense?.22:.10;
-    if(habitat.kind===0){
-      ctx.fillStyle=`rgba(85,185,225,${alpha})`;
-      ctx.strokeStyle=`rgba(85,185,225,${strokeAlpha})`;
-    }else{
-      ctx.fillStyle=`rgba(242,172,76,${alpha})`;
-      ctx.strokeStyle=`rgba(242,172,76,${strokeAlpha})`;
-    }
-    ctx.fillRect(x-half,y-half,half*2,half*2);
-    ctx.lineWidth=1;
-    ctx.strokeRect(x-half,y-half,half*2,half*2);
-  }
+  for(const habitat of M4_HABITATS) drawM4bHabitat(ctx,habitat,LOGICAL_WORLD_WIDTH,LOGICAL_WORLD_HEIGHT);
 }
 
 function draw(){
@@ -125,17 +107,7 @@ function draw(){
     ctx.beginPath();ctx.arc(f.x,f.y,f.rich?3.5:2.3,0,Math.PI*2);ctx.fill();
   }
 
-  for(const b of sim.blobs){
-    const g=b.g,v=Math.hypot(b.vx,b.vy),ang=Math.atan2(b.vy,b.vx);
-    const dietHue=115-75*g.diet;
-    ctx.strokeStyle=`hsla(${dietHue},75%,62%,.30)`; ctx.lineWidth=Math.max(1,g.size*.35);
-    ctx.beginPath();ctx.moveTo(b.x-Math.cos(ang)*g.size*.6,b.y-Math.sin(ang)*g.size*.6);
-    ctx.lineTo(b.x-Math.cos(ang)*(g.size+v*.12),b.y-Math.sin(ang)*(g.size+v*.12));ctx.stroke();
-    ctx.strokeStyle=`hsla(${dietHue},65%,68%,.055)`;ctx.lineWidth=1;ctx.beginPath();ctx.arc(b.x,b.y,g.sense,0,Math.PI*2);ctx.stroke();
-    ctx.fillStyle=`hsl(${dietHue},72%,58%)`;ctx.beginPath();ctx.arc(b.x,b.y,g.size,0,Math.PI*2);ctx.fill();
-    const e=Math.max(0,Math.min(1,b.energy/140));ctx.fillStyle=`rgba(255,255,255,${.18+.65*e})`;
-    ctx.beginPath();ctx.arc(b.x+g.size*.25,b.y-g.size*.2,Math.max(1.1,g.size*.2),0,Math.PI*2);ctx.fill();
-  }
+  for(const b of sim.blobs) drawM4bBlob(ctx,b);
 
   const snap=sim.snapshot(), init=sim.initial;
   ui.pop.textContent=snap.population; ui.gen.textContent=snap.maxGeneration; ui.food.textContent=snap.food;
