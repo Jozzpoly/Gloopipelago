@@ -8,37 +8,39 @@ function m4bPhenotypeVisual(genome) {
   const size01 = trait01(genome.size,2.4,9);
   const diet01 = clamp01(((genome.diet ?? 0)+1)/2);
   const inheritedHue = ((genome.hue ?? 0)%360+360)%360;
+  const visualRadius = lerp(3.2,9.8,size01);
 
   return {
     speed01,
     sense01,
     size01,
     diet01,
-    bodyRadius:genome.size,
-    bodyLength:genome.size*lerp(1.03,1.30,speed01),
-    bodyWidth:genome.size*lerp(.98,.82,speed01),
-    tailLength:lerp(4,18,speed01),
-    senseLength:lerp(8,28,sense01),
-    senseHalfAngle:lerp(.25,.43,sense01),
+    visualRadius,
+    bodyLength:visualRadius*lerp(1.08,1.72,speed01),
+    bodyWidth:visualRadius*lerp(1.00,.72,speed01),
+    tailLength:lerp(2.5,22,speed01),
+    senseCueRadius:visualRadius+lerp(3,12,sense01),
+    senseArcSpan:lerp(.24,.42,sense01),
     dietHue:lerp(190,40,diet01),
     accentHue:inheritedHue,
-    accentRadius:lerp(1.05,2.15,size01),
+    accentRadius:visualRadius*lerp(.18,.25,size01),
   };
 }
 
 function m4bHabitatVisual(habitat, worldWidth, worldHeight) {
   const minWorld=Math.min(worldWidth,worldHeight);
-  const radius=minWorld*habitat.spread;
+  const halfExtent=minWorld*habitat.spread;
   const dense=habitat.regime==='dense';
   return {
     x:habitat.x*worldWidth,
     y:habitat.y*worldHeight,
-    radius,
+    halfExtent,
     dense,
     kind:habitat.kind,
-    coreAlpha:dense?.095:.032,
-    midAlpha:dense?.045:.022,
-    edgeAlpha:dense?.004:.002,
+    innerAlpha:dense?.060:.029,
+    midAlpha:dense?.020:.010,
+    outerAlpha:dense?.010:.005,
+    cornerRadius:Math.max(5,halfExtent*.10),
   };
 }
 
@@ -46,26 +48,20 @@ function m4bHabitatRgb(kind) {
   return kind===0 ? [85,185,225] : [242,172,76];
 }
 
+function roundedField(ctx,x,y,halfExtent,radius,rgba){
+  ctx.fillStyle=rgba;
+  ctx.beginPath();
+  if(typeof ctx.roundRect==='function') ctx.roundRect(x-halfExtent,y-halfExtent,halfExtent*2,halfExtent*2,radius);
+  else ctx.rect(x-halfExtent,y-halfExtent,halfExtent*2,halfExtent*2);
+  ctx.fill();
+}
+
 function drawM4bHabitat(ctx, habitat, worldWidth, worldHeight) {
   const v=m4bHabitatVisual(habitat,worldWidth,worldHeight);
   const [r,g,b]=m4bHabitatRgb(v.kind);
-  const grad=ctx.createRadialGradient(v.x,v.y,0,v.x,v.y,v.radius);
-  grad.addColorStop(0,`rgba(${r},${g},${b},${v.coreAlpha})`);
-  grad.addColorStop(.46,`rgba(${r},${g},${b},${v.midAlpha})`);
-  grad.addColorStop(1,`rgba(${r},${g},${b},${v.edgeAlpha})`);
-  ctx.fillStyle=grad;
-  ctx.beginPath();
-  ctx.arc(v.x,v.y,v.radius,0,Math.PI*2);
-  ctx.fill();
-
-  const inner=v.radius*(v.dense?.34:.58);
-  const innerGrad=ctx.createRadialGradient(v.x,v.y,0,v.x,v.y,inner);
-  innerGrad.addColorStop(0,`rgba(${r},${g},${b},${v.dense?.055:.010})`);
-  innerGrad.addColorStop(1,`rgba(${r},${g},${b},0)`);
-  ctx.fillStyle=innerGrad;
-  ctx.beginPath();
-  ctx.arc(v.x,v.y,inner,0,Math.PI*2);
-  ctx.fill();
+  roundedField(ctx,v.x,v.y,v.halfExtent*1.08,v.cornerRadius*1.25,`rgba(${r},${g},${b},${v.outerAlpha})`);
+  roundedField(ctx,v.x,v.y,v.halfExtent*1.04,v.cornerRadius*1.12,`rgba(${r},${g},${b},${v.midAlpha})`);
+  roundedField(ctx,v.x,v.y,v.halfExtent,v.cornerRadius,`rgba(${r},${g},${b},${v.innerAlpha})`);
 }
 
 function drawM4bBlob(ctx, blob) {
@@ -75,58 +71,54 @@ function drawM4bBlob(ctx, blob) {
   const angle=velocity>.08?Math.atan2(blob.vy,blob.vx):blob.a;
   const ca=Math.cos(angle),sa=Math.sin(angle);
 
-  const rearX=blob.x-ca*v.bodyLength*.72;
-  const rearY=blob.y-sa*v.bodyLength*.72;
+  const rearX=blob.x-ca*v.bodyLength*.70;
+  const rearY=blob.y-sa*v.bodyLength*.70;
   const tailX=rearX-ca*v.tailLength;
   const tailY=rearY-sa*v.tailLength;
-  ctx.strokeStyle=`hsla(${v.dietHue},76%,60%,${.13+.20*v.speed01})`;
-  ctx.lineWidth=Math.max(.7,v.bodyWidth*.32);
+  ctx.strokeStyle=`hsla(${v.dietHue},82%,62%,${.14+.24*v.speed01})`;
+  ctx.lineWidth=Math.max(.8,v.bodyWidth*.34);
   ctx.lineCap='round';
   ctx.beginPath();
   ctx.moveTo(rearX,rearY);
   ctx.lineTo(tailX,tailY);
   ctx.stroke();
 
-  const noseX=blob.x+ca*v.bodyLength*.72;
-  const noseY=blob.y+sa*v.bodyLength*.72;
-  ctx.strokeStyle=`hsla(${v.dietHue},70%,72%,.16)`;
-  ctx.fillStyle=`hsla(${v.dietHue},78%,74%,.34)`;
+  ctx.strokeStyle=`hsla(${v.dietHue},76%,72%,${.10+.08*v.sense01})`;
   ctx.lineWidth=.8;
-  for(const side of [-1,1]){
-    const a=angle+side*v.senseHalfAngle;
-    const tx=noseX+Math.cos(a)*v.senseLength;
-    const ty=noseY+Math.sin(a)*v.senseLength;
+  for(const center of [0,Math.PI*.5,Math.PI,Math.PI*1.5]){
     ctx.beginPath();
-    ctx.moveTo(noseX,noseY);
-    ctx.lineTo(tx,ty);
+    ctx.arc(blob.x,blob.y,v.senseCueRadius,center-v.senseArcSpan*.5,center+v.senseArcSpan*.5);
     ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(tx,ty,1.05,0,Math.PI*2);
-    ctx.fill();
   }
 
   ctx.save();
   ctx.translate(blob.x,blob.y);
   ctx.rotate(angle);
-  ctx.fillStyle=`hsl(${v.dietHue},72%,56%)`;
+  ctx.fillStyle=`hsl(${v.dietHue},74%,56%)`;
   ctx.beginPath();
   ctx.ellipse(0,0,v.bodyLength,v.bodyWidth,0,0,Math.PI*2);
   ctx.fill();
 
-  ctx.fillStyle=`hsla(${v.dietHue},70%,38%,.32)`;
+  ctx.fillStyle=`hsla(${v.dietHue},72%,35%,.34)`;
   ctx.beginPath();
-  ctx.ellipse(-v.bodyLength*.38,0,v.bodyLength*.36,v.bodyWidth*.72,0,0,Math.PI*2);
+  ctx.ellipse(-v.bodyLength*.40,0,v.bodyLength*.34,v.bodyWidth*.70,0,0,Math.PI*2);
   ctx.fill();
 
-  ctx.fillStyle=`hsl(${v.accentHue},78%,68%)`;
+  ctx.strokeStyle=`hsla(${v.dietHue},85%,82%,.38)`;
+  ctx.lineWidth=.65;
   ctx.beginPath();
-  ctx.arc(v.bodyLength*.14,-v.bodyWidth*.28,v.accentRadius,0,Math.PI*2);
+  ctx.ellipse(0,0,v.bodyLength,v.bodyWidth,0,0,Math.PI*2);
+  ctx.stroke();
+
+  ctx.fillStyle=`hsl(${v.accentHue},80%,68%)`;
+  ctx.beginPath();
+  ctx.arc(v.bodyLength*.12,-v.bodyWidth*.28,v.accentRadius,0,Math.PI*2);
   ctx.fill();
 
   const energy=clamp01(blob.energy/140);
-  ctx.fillStyle=`rgba(255,255,255,${.20+.62*energy})`;
+  ctx.fillStyle=`rgba(255,255,255,${.18+.64*energy})`;
   ctx.beginPath();
-  ctx.arc(v.bodyLength*.30,v.bodyWidth*.05,Math.max(.9,v.bodyWidth*.18),0,Math.PI*2);
+  ctx.arc(v.bodyLength*.31,v.bodyWidth*.04,Math.max(1,v.bodyWidth*.18),0,Math.PI*2);
   ctx.fill();
   ctx.restore();
 }
