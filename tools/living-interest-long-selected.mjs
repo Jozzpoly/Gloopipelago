@@ -1,0 +1,23 @@
+import { Simulation } from '../src/core/v1-mirror.mjs';
+
+const DT=1/60, HORIZON=1800;
+const SEEDS=[1,0x12345678,956866913];
+const BASE={width:900,height:700,mutationScale:1,senseCost:.0026,digestExponent:3,minDigestion:.4,autoReseed:true,foodRate:10,foodEnergyScale:1,foodLifetime:75,dietJumpRate:.02,stableNiches:true};
+const PROFILES=[
+  {name:'baseline',config:{}},
+  {name:'mutation-2x',config:{mutationScale:2}},
+  {name:'more-resources',config:{foodRate:16,foodLifetime:95}},
+  {name:'mixed-existing-knobs',config:{mutationScale:1.7,senseCost:.005,digestExponent:2.1,minDigestion:.32,foodRate:14,foodLifetime:90,dietJumpRate:.06,stableNiches:false}},
+  {name:'larger-world-same-budget',config:{width:1200,height:900}},
+  {name:'larger-world-scaled-start',config:{width:1200,height:900,foodRate:16,foodLifetime:95},extraFounders:34,extraFood:145}
+];
+const RANGES={speed:[.35,1.9],sense:[20,150],size:[2.4,9],eff:[.55,1.45],wander:[.15,1.5],diet:[-1,1]};
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+const median=a=>{const s=[...a].sort((x,y)=>x-y),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2};
+function effCount(counts){const n=counts.reduce((a,b)=>a+b,0);if(!n)return 0;let h=0;for(const c of counts)if(c){const p=c/n;h-=p*Math.log(p)}return Math.exp(h)}
+function norm(g,k){const [a,b]=RANGES[k];return Math.max(0,Math.min(1,(g[k]-a)/(b-a)))}
+function strategy(blobs){const bins=new Map();let extreme=0;for(const b of blobs){if(Math.abs(b.g.diet)>=.8)extreme++;const key=Object.keys(RANGES).map(k=>Math.min(2,Math.floor(norm(b.g,k)*3))).join('');bins.set(key,(bins.get(key)||0)+1)}return{bins:bins.size,effective:effCount([...bins.values()]),extremeDietFraction:blobs.length?extreme/blobs.length:0}}
+function occupancy(sim){const C=12,R=9,c=Array(C*R).fill(0);for(const b of sim.blobs){const x=Math.min(C-1,Math.max(0,Math.floor(b.x/sim.width*C))),y=Math.min(R-1,Math.max(0,Math.floor(b.y/sim.height*R)));c[y*C+x]++}return c.filter(Boolean).length/(C*R)}
+function pairDist(blobs){if(blobs.length<2)return 0;const keys=Object.keys(RANGES);let s=0,n=0;for(let i=0;i<blobs.length;i++)for(let j=i+1;j<blobs.length;j++){let d=0;for(const k of keys)d+=(norm(blobs[i].g,k)-norm(blobs[j].g,k))**2;s+=Math.sqrt(d/keys.length);n++}return s/n}
+function run(profile,seed){const roots=new Map();const witness=r=>{if(r.kind==='founder')roots.set(r.id,r.id);else if(r.kind==='birth')roots.set(r.id,roots.get(r.parentId)??r.parentId)};const sim=new Simulation({...BASE,...profile.config,seed},{lifecycleWitness:witness});for(let i=0;i<(profile.extraFounders||0);i++){const b=sim.spawnBlob();roots.set(b.id,b.id)}if(profile.extraFood)sim.addFood(profile.extraFood);const pops=[];for(let t=1;t<=HORIZON/DT;t++){sim.step(DT);if(t%3600===0)pops.push(sim.blobs.length)}const rootCounts=new Map();for(const b of sim.blobs){const r=roots.get(b.id)??b.id;rootCounts.set(r,(rootCounts.get(r)||0)+1)}const rc=[...rootCounts.values()],st=strategy(sim.blobs);return{profile:profile.name,seed:seed>>>0,population:sim.blobs.length,populationMean:mean(pops),births:sim.births,deaths:sim.deaths,maxGeneration:sim.snapshot().maxGeneration,dietAbs:sim.snapshot().dietAbs,occupiedFraction:occupancy(sim),strategyBins:st.bins,strategyEffective:st.effective,extremeDietFraction:st.extremeDietFraction,pairwiseGenomeDistance:pairDist(sim.blobs),activeFounderRoots:rootCounts.size,lineageEffective:effCount(rc),topLineageShare:sim.blobs.length?Math.max(...rc)/sim.blobs.length:0,speedMean:sim.avg('speed'),senseMean:sim.avg('sense'),sizeMean:sim.avg('size'),effMean:sim.avg('eff'),wanderMean:sim.avg('wander')}}
+const runs=[];for(const p of PROFILES)for(const s of SEEDS)runs.push(run(p,s));const aggregate={};for(const p of PROFILES){const rs=runs.filter(r=>r.profile===p.name),pick=k=>rs.map(r=>r[k]);aggregate[p.name]={populationMedian:median(pick('population')),populationMeanMedian:median(pick('populationMean')),occupiedFractionMedian:median(pick('occupiedFraction')),strategyEffectiveMedian:median(pick('strategyEffective')),strategyBinsMedian:median(pick('strategyBins')),pairwiseGenomeDistanceMedian:median(pick('pairwiseGenomeDistance')),extremeDietFractionMedian:median(pick('extremeDietFraction')),activeFounderRootsMedian:median(pick('activeFounderRoots')),lineageEffectiveMedian:median(pick('lineageEffective')),topLineageShareMedian:median(pick('topLineageShare')),speedMeanMedian:median(pick('speedMean')),senseMeanMedian:median(pick('senseMean')),maxGenerationMedian:median(pick('maxGeneration'))}}process.stdout.write(JSON.stringify({horizonSeconds:HORIZON,seeds:SEEDS.map(x=>x>>>0),profiles:PROFILES,aggregate,runs},null,2)+'\n');
