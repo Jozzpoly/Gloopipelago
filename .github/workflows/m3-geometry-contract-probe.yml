@@ -1,9 +1,9 @@
 name: M3 geometry contract probe
 
 on:
-  push:
+  pull_request:
     branches:
-      - m3-logical-world-view-contract
+      - main
 
 jobs:
   geometry-probe:
