@@ -20,11 +20,11 @@ jobs:
         run: |
           node --version
           sha256sum src/core/v1-mirror.mjs
-      - name: Multipatch diversity falsification probe
-        run: node tools/multipatch-diversity-probe.mjs > multipatch-diversity-probe.json
+      - name: Resource-regime local adaptation probe
+        run: node tools/resource-regime-probe.mjs > resource-regime-probe.json
       - name: Upload evidence
         uses: actions/upload-artifact@v4
         with:
-          name: multipatch-diversity-probe
-          path: multipatch-diversity-probe.json
+          name: resource-regime-probe
+          path: resource-regime-probe.json
           if-no-files-found: error
