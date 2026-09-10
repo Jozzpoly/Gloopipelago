@@ -1,0 +1,20 @@
+import { Simulation } from '../src/core/v1-mirror.mjs';
+
+const DT=1/60,HORIZON=1800,SEEDS=[1,0x12345678,956866913];
+const PATCHES=[
+  {id:'A-dense-1',kind:0,regime:'dense',x:.14,y:.22,spread:.035},{id:'A-diffuse-1',kind:0,regime:'diffuse',x:.42,y:.20,spread:.12},
+  {id:'A-dense-2',kind:0,regime:'dense',x:.18,y:.72,spread:.035},{id:'A-diffuse-2',kind:0,regime:'diffuse',x:.44,y:.76,spread:.12},
+  {id:'B-dense-1',kind:1,regime:'dense',x:.84,y:.20,spread:.035},{id:'B-diffuse-1',kind:1,regime:'diffuse',x:.62,y:.27,spread:.12},
+  {id:'B-dense-2',kind:1,regime:'dense',x:.86,y:.74,spread:.035},{id:'B-diffuse-2',kind:1,regime:'diffuse',x:.62,y:.78,spread:.12}
+];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+class RegimeSimulation extends Simulation{
+  foodPatch(kind=null){const k=kind??(this.rng()<.5?0:1),list=PATCHES.filter(p=>p.kind===k),p=list[Math.floor(this.rng()*list.length)],spread=Math.min(this.width,this.height)*p.spread;return{x:clamp(p.x*this.width+this.rand(-spread,spread),8,this.width-8),y:clamp(p.y*this.height+this.rand(-spread,spread),8,this.height-8),kind:k}}
+}
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+const median=a=>{const s=[...a].sort((x,y)=>x-y),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2};
+function effective(c){const n=c.reduce((a,b)=>a+b,0);if(!n)return 0;let h=0;for(const x of c)if(x){const p=x/n;h-=p*Math.log(p)}return Math.exp(h)}
+function nearestPatch(sim,b){let best=null,bd=Infinity;for(const p of PATCHES){const dx=b.x-p.x*sim.width,dy=b.y-p.y*sim.height,d=dx*dx+dy*dy;if(d<bd){bd=d;best=p}}return best}
+function regimeStats(sim){const groups={dense:[],diffuse:[]};for(const b of sim.blobs)groups[nearestPatch(sim,b).regime].push(b);const out={};for(const [name,bs] of Object.entries(groups))out[name]={n:bs.length,speed:mean(bs.map(b=>b.g.speed)),sense:mean(bs.map(b=>b.g.sense)),size:mean(bs.map(b=>b.g.size)),eff:mean(bs.map(b=>b.g.eff)),wander:mean(bs.map(b=>b.g.wander)),dietAbs:mean(bs.map(b=>Math.abs(b.g.diet)))};return out}
+function run(seed){const roots=new Map();const witness=r=>{if(r.kind==='founder')roots.set(r.id,r.id);else if(r.kind==='birth')roots.set(r.id,roots.get(r.parentId)??r.parentId)};const sim=new RegimeSimulation({seed,width:1200,height:900,mutationScale:1,senseCost:.0026,digestExponent:3,minDigestion:.4,autoReseed:true,foodRate:16,foodEnergyScale:1,foodLifetime:75,dietJumpRate:.02,stableNiches:true},{lifecycleWitness:witness});for(let i=0;i<34;i++){const b=sim.spawnBlob();roots.set(b.id,b.id)}sim.addFood(145);for(let i=0;i<HORIZON/DT;i++)sim.step(DT);const rc=new Map();for(const b of sim.blobs){const r=roots.get(b.id)??b.id;rc.set(r,(rc.get(r)||0)+1)}const groups=regimeStats(sim),counts=[...rc.values()];return{seed:seed>>>0,population:sim.blobs.length,activeFounderRoots:rc.size,lineageEffective:effective(counts),topLineageShare:Math.max(...counts)/sim.blobs.length,regimes:groups,deltas:{speedDiffuseMinusDense:groups.diffuse.speed-groups.dense.speed,senseDiffuseMinusDense:groups.diffuse.sense-groups.dense.sense,effDiffuseMinusDense:groups.diffuse.eff-groups.dense.eff,wanderDiffuseMinusDense:groups.diffuse.wander-groups.dense.wander}}}
+const runs=SEEDS.map(run),v=k=>runs.map(r=>r.deltas[k]);process.stdout.write(JSON.stringify({status:'EXPLORATORY MODEL PROBE — NOT PRODUCT AUTHORITY',horizonSeconds:HORIZON,world:[1200,900],patches:PATCHES,runs,aggregate:{populationMedian:median(runs.map(r=>r.population)),activeFounderRootsMedian:median(runs.map(r=>r.activeFounderRoots)),lineageEffectiveMedian:median(runs.map(r=>r.lineageEffective)),speedDiffuseMinusDenseMedian:median(v('speedDiffuseMinusDense')),senseDiffuseMinusDenseMedian:median(v('senseDiffuseMinusDense')),effDiffuseMinusDenseMedian:median(v('effDiffuseMinusDense')),wanderDiffuseMinusDenseMedian:median(v('wanderDiffuseMinusDense'))}},null,2)+'\n');
